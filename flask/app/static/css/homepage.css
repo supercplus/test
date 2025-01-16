@@ -1,0 +1,154 @@
+.home {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  height: 90vh;
+  box-sizing: border-box;
+  /* background-color: #00538C !important; */
+}
+
+.home-content {
+  flex: 1;
+  margin-right: 20px;
+  max-width: 100%;
+}
+
+.home-content h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.home-content p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.home-content button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.home-content button:hover {
+  background-color: #ffa500;
+  color: black;
+  transform: scale(1.05);
+}
+
+.carousel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.carousel-inner img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 15px;
+}
+
+/* ปรับการแสดงผลเมื่อหน้าจอมีขนาดเล็กกว่า 768px */
+@media (max-width: 768px) {
+  .home {
+    flex-direction: column; /* วางเนื้อหาเป็นแนวตั้ง */
+    text-align: center;
+  }
+
+  .home-content {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .home-content h1 {
+    font-size: 30px;
+  }
+
+  .home-content p {
+    font-size: 16px;
+  }
+
+  .carousel-inner img {
+    max-width: 90%;
+  }
+}
+
+/* ปรับการแสดงผลเมื่อหน้าจอมีขนาดเล็กกว่า 480px */
+@media (max-width: 480px) {
+  .home-content h1 {
+    font-size: 26px;
+  }
+
+  .home-content p {
+    font-size: 14px;
+  }
+
+  .home-content button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .carousel-inner img {
+    max-width: 100%;
+  }
+}
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.bg{
+    position: relative;
+}
+.bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background-color: #00224e; */
+  background-color: #00538C;
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  }
+.navbar{
+    background-color: white;
+  }
+  
+  .navbar-collapse {
+    display: flex;
+    justify-content: space-around; /* ทำให้ปุ่มบน navbar ห่างกันอย่างสมดุล */
+    align-items: center;
+    width: 100%;
+}
+
+.navbar a {
+    font-size: 20px;
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 60px;
+}
+
+
+.navbar a:hover {
+color: #ffa500;
+}
+.navbar-nav {
+  margin-right: 15px; /* กำหนดระยะห่างทางด้านขวาของ navbar */
+}
+
+
+
+

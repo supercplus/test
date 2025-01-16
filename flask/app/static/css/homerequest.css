@@ -1,0 +1,179 @@
+/* Global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.bg {
+    position: relative;
+    min-height: 100vh; /* ปรับให้ background ครอบคลุมทั้งหน้าจอ */
+    background-color: #00538C; /* กำหนดสีพื้นหลัง */
+}
+
+/* Navbar */
+.navbar {
+    background-color: white;
+}
+
+.navbar-collapse {
+    display: flex;
+    justify-content: space-around; /* ทำให้ปุ่มบน navbar ห่างกันอย่างสมดุล */
+    align-items: center;
+    width: 100%;
+}
+
+.navbar a {
+    font-size: 20px;
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 60px;
+}
+
+.navbar a:hover {
+    color: #ffa500;
+}
+
+/* Research Upload Section */
+.research-upload-section {
+    padding: 40px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* ช่องว่างระหว่างกล่อง */
+}
+
+/* ขนาดเริ่มต้นของกล่อง */
+.icon-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid transparent;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: auto; /* ปรับขนาดความกว้างของกล่องโดยอัตโนมัติ */
+}
+
+/* ขนาดเริ่มต้นของไอคอน */
+.icon-box img {
+    width: 60px;  /* ขนาดไอคอน */
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.icon-box h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.icon-box p {
+    font-size: 12px;
+    color: #555;
+}
+
+/* Header Image */
+.header-section img {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh; /* ให้คอนเทนเนอร์มีความสูงเต็มจอ */
+    
+}
+
+.research-section-bg {
+    margin-top: 10px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Media Queries for responsiveness */
+
+/* หน้าจอขนาดกลาง (max-width: 992px) */
+@media (max-width: 992px) {
+    .icon-box {
+        padding: 15px; /* ลดขนาด Padding ของกล่อง */
+    }
+
+    .icon-box img {
+        width: 50px; /* ลดขนาดไอคอน */
+        height: 50px;
+    }
+    .header-section img {
+        max-width: 55%; /* ปรับขนาดรูปภาพ */
+    }
+}
+
+/* หน้าจอขนาดเล็ก (max-width: 768px) */
+@media (max-width: 768px) {
+    .research-upload-section {
+        flex-direction: column; /* เปลี่ยนให้กล่องเรียงกันในแนวตั้ง */
+    }
+
+
+
+
+    .icon-box {
+        padding: 10px; /* ลดขนาด Padding ของกล่อง */
+    }
+
+/* Media Queries for responsiveness */
+
+/* หน้าจอขนาดกลาง (max-width: 992px) */
+@media (max-width: 992px) {
+    .icon-box {
+        padding: 15px; /* ลดขนาด Padding ของกล่อง */
+    }
+
+    .icon-box img {
+        width: 50px; /* ลดขนาดไอคอน */
+        height: 50px;
+    }
+    .header-section img {
+        max-width: 55%; /* ปรับขนาดรูปภาพ */
+    }
+}
+
+/* หน้าจอขนาดเล็ก (max-width: 768px) */
+@media (max-width: 768px) {
+    .research-upload-section {
+        flex-direction: column; /* เปลี่ยนให้กล่องเรียงกันในแนวตั้ง */
+    }
+
+    .icon-box {
+        padding: 10px; /* ลดขนาด Padding ของกล่อง */
+    }
+
+    .icon-box img {
+        width: 40px; /* ลดขนาดไอคอน */
+        height: 40px;
+    }
+
+    .header-section img {
+        max-width: 50%; /* ปรับขนาดรูปภาพ */
+    }
+}
+
+/* หน้าจอขนาดมือถือ (max-width: 576px) */
+@media (max-width: 576px) {
+    .icon-box {
+        padding: 8px; /* ลดขนาด Padding ของกล่อง */
+    }
+
+    .icon-box img {
+        width: 30px; /* ลดขนาดไอคอน */
+        height: 30px;
+    }
+
+    .header-section img {
+        max-width: 40%; /* ปรับขนาดรูปภาพ */
+    }
+}}

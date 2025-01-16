@@ -1,0 +1,138 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="/static/css/stat.css">
+{% extends "temp/adbase.html" %}
+{% block content %}
+<title>Student Statistic</title>
+
+<body>
+  <div class="grid-container">
+    <main class="main-container">
+      <div class="main-title">
+        <p class="head">Statistic Dashboard</p>
+      </div>
+
+      <div class="main-cards">
+        <div class="card">
+          <div class="card-inner">
+            <p class="text-primary">All Files</p>
+          </div>
+          <span class="text-primary">{{ statistics.all_files_count }}</span>
+        </div>
+
+        <div class="card">
+          <div class="card-inner">
+            <p class="text-primary">Regular Students</p>
+          </div>
+          <span class="text-primary">{{ statistics.regular_students_count }}</span>
+        </div>
+
+        <div class="card">
+          <div class="card-inner">
+            <p class="text-primary">Co-operative Education Students</p>
+          </div>
+          <span class="text-primary">{{ statistics.coop_students_count }}</span>
+        </div>
+      </div>
+
+      <div class="charts">
+        <div class="charts-card">
+          <p class="charts-title"> Top 5 Category</p>
+          <div id="bar-chart" data-categories='{{ statistics.top_categories | tojson }}'></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.53.0/apexcharts.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // ดึงข้อมูล category จาก attribute data-categories
+      var barChartElement = document.getElementById('bar-chart');
+      var dataCategories = barChartElement.getAttribute('data-categories');
+  
+      console.log("Data Categories:", dataCategories); // ตรวจสอบข้อมูลที่ดึงมา
+  
+      // ลองแปลงข้อมูล JSON
+      try {
+        var topCategories = JSON.parse(dataCategories);
+        console.log("Parsed Data:", topCategories); // ตรวจสอบว่าข้อมูลหลังแปลง JSON ถูกต้อง
+      } catch (e) {
+        console.error("Error parsing JSON:", e);
+        return; // หาก JSON แปลงผิดพลาด ให้หยุดการทำงานที่เหลือ
+      }
+  
+      // ดึงข้อมูลชื่อ category และ count
+      var categoryNames = topCategories.map(function(category) { return category.name; });
+      var categoryCounts = topCategories.map(function(category) { return category.count; });
+  
+      // ตรวจสอบข้อมูลเพื่อ debug
+      console.log("Category Names:", categoryNames);
+      console.log("Category Counts:", categoryCounts);
+  
+      // คำนวณค่ามากที่สุดใน categoryCounts เพื่อใช้กำหนดแกน y
+      var maxCount = Math.max(...categoryCounts);
+  
+      // ตั้งค่ากราฟแท่ง
+      var barChartOptions = {
+        series: [{
+          data: categoryCounts
+        }],
+        chart: {
+          type: 'bar',
+          height: 400,  // กำหนดความสูงเพื่อให้กราฟแสดงผลชัดเจน
+          width: '100%'
+        },
+        colors: [
+          "#246dec",
+          "#cc3c43",
+          "#367952",
+          "#f5b74f",
+          "#4f35a1"
+        ],
+        plotOptions: {
+          bar: {
+            distributed: true,
+            borderRadius: 4,
+            horizontal: false,
+            columnWidth: '25%',
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        xaxis: {
+          categories: categoryNames,
+          labels: {
+            style: {
+              fontSize: '16px'
+            }
+          }
+        },
+        yaxis: {
+          min: 0,  // กำหนดค่าเริ่มต้นที่ 0
+          max: maxCount + 2,  // กำหนดค่าสูงสุดเป็นค่าที่มากกว่าค่าจริงเล็กน้อยเพื่อเพิ่มความชัดเจน
+          title: {
+            text: "Count",
+            style: {
+              fontSize: '18px'
+            }
+          },
+          labels: {
+            style: {
+              fontSize: '16px'
+            },
+            formatter: function (value) {
+              return Math.round(value); // แปลงค่าเป็นเลขจำนวนเต็ม
+            }
+          }
+        }
+      };
+  
+      // สร้างกราฟด้วย ApexCharts
+      var barChart = new ApexCharts(barChartElement, barChartOptions);
+      barChart.render();
+    });
+  </script>
+  
+</body>
+{% endblock %}

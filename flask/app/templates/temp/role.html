@@ -1,0 +1,227 @@
+{% extends "temp/adbase.html" %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="/static/css/role.css">
+
+<head>
+  <title>Role Management</title>
+</head>
+
+<body>
+
+  <div class="content">
+    <div class="header-bar">
+      <div class="header-item">ID</div>
+      <div class="header-item">Role</div>
+      <div class="header-item">CMU Mail</div>
+      <div class="header-item"></div>
+    </div>
+  </div>
+
+  <div class="data-container">
+    <!-- Data rows will be populated here via JavaScript -->
+  </div>
+
+  {% if role == 'Super_Admin' %}
+  <div class="add-button-container">
+      <button class="add-button" onclick="openFormPopup()">Add</button>
+  </div>
+  {% endif %}  
+
+  <div id="form-popup" class="popup" style="display: none;">
+    <div class="popup-content">
+      <form id="role-form">
+        <div class="form-group">
+          <label for="mail">CMU Mail:</label>
+          <input type="email" id="mail" name="mail" required>
+        </div>
+        <div class="form-group">
+          <label for="role">Role:</label>
+          <select id="role" name="role" required>
+            <option value="">Select a role</option>
+            <option value="Super_Admin">Super_Admin</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
+        <div class="popup-button-container">
+          <button type="button" class="confirm-button" onclick="submitForm()">Confirm</button>
+          <button type="button" class="cancel-button" onclick="closeFormPopup()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="confirm-popup" class="popup" style="display: none;">
+    <div class="popup-content">
+      <p id="confirm-message"></p>
+      <div class="popup-button-container">
+        <button type="button" class="confirm-delete" onclick="deleteItem(currentRowId)">Confirm</button>
+        <button type="button" class="cancel-button" onclick="closeConfirmPopup()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', function () {
+    document.querySelectorAll('.nav-link').forEach(item => item.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+let currentRow;
+let isEditMode = false;
+let currentRowId;
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetch('/users')
+    .then(response => response.json())
+    .then(data => {
+      const dataContainer = document.querySelector('.data-container');
+      dataContainer.innerHTML = ''; 
+
+      data.forEach((user, index) => {
+        const newRow = document.createElement("div");
+        newRow.classList.add("data-row");
+        newRow.setAttribute('data-id', user.id);
+        newRow.innerHTML = `
+          <div class="data-item">${user.id}</div>
+          <div class="Role">${user.role}</div>
+          <div class="email">${user.email}</div>
+          <div class="action-buttons">
+              <button class="edit-button" onclick="openFormPopup(this, ${user.id})">Edit</button>
+              <button class="delete-button" onclick="confirmDelete(this, ${user.id})">Delete</button>
+          </div>
+        `;
+        dataContainer.appendChild(newRow);
+      });
+    })
+    .catch(error => console.error('Error fetching data:', error));
+});
+
+function openFormPopup(button, userId) {
+  const currentUserRole = "{{ role }}";  // ดึงข้อมูล role ของผู้ใช้จาก session
+
+  if (currentUserRole !== "Super_Admin") {
+    alert("You do not have permission to add or edit users.");
+    return;
+  }
+
+  currentRowId = userId;
+  if (button) {
+    currentRow = button.closest('.data-row');
+    const role = currentRow.children[1].innerText;
+    const email = currentRow.querySelector('.email').innerText;
+
+    document.getElementById("role").value = role;
+    document.getElementById("mail").value = email;
+    isEditMode = true;
+  } else {
+    document.getElementById("role").value = "";
+    document.getElementById("mail").value = "";
+    isEditMode = false;
+  }
+  document.getElementById("form-popup").style.display = "block";
+}
+
+function submitForm() {
+    const role = document.getElementById("role").value;
+    const email = document.getElementById("mail").value;
+    console.log("Role:", role); 
+    console.log("Email:", email);
+    if (role && email) {
+        const data = { role: role, email: email };
+
+        if (isEditMode && currentRowId) {
+            fetch(`/api/users/${currentRowId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Error updating user');
+                return response.json();
+            })
+            .then(updatedUser => {
+                currentRow.children[1].innerText = updatedUser.role;
+                currentRow.querySelector('.email').innerText = updatedUser.email;
+                closeFormPopup();
+            })
+            .catch(error => alert(`Error updating user: ${error.message}`));
+        } else {
+            fetch('/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Error adding new user');
+                return response.json();
+            })
+            .then(newUser => {
+                const newRow = document.createElement("div");
+                newRow.classList.add("data-row");
+                newRow.setAttribute('data-id', newUser.id);
+                newRow.innerHTML = `
+                    <div class="data-item">${newUser.id}</div>
+                    <div class="Role">${role}</div>
+                    <div class="email">${email}</div>
+                    <div class="action-buttons">
+                        <button class="edit-button" onclick="openFormPopup(this, ${newUser.id})">Edit</button>
+                        <button class="delete-button" onclick="confirmDelete(this, ${newUser.id})">Delete</button>
+                    </div>
+                `;
+                document.querySelector(".data-container").appendChild(newRow);
+                closeFormPopup();
+            })
+            .catch(error => alert(`Error adding new user: ${error.message}`));
+        }
+    } else {
+        alert("Please fill in all fields.");
+    }
+}
+
+
+function closeFormPopup() {
+  document.getElementById("form-popup").style.display = "none";
+}
+
+function confirmDelete(button, userId) {
+  const currentUserRole = "{{ role }}";
+
+  if (currentUserRole !== "Super_Admin") {
+    alert("You do not have permission to delete users.");
+    return;
+  }
+
+  currentRow = button.closest('.data-row');
+  const email = currentRow.querySelector('.email').innerText;
+  currentRowId = userId;
+  document.getElementById("confirm-message").innerText = `Delete ${email}?`;
+  document.getElementById("confirm-popup").style.display = "block";
+}
+
+
+function deleteItem(userId) {
+  fetch(`/api/users/${userId}`, {  
+    method: 'DELETE', 
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('Error deleting user');
+    return response.json();
+  })
+  .then(() => {
+    currentRow.remove(); 
+    closeConfirmPopup();
+  })
+  .catch(error => console.error('Error deleting user:', error));
+}
+
+
+function closeConfirmPopup() {
+  document.getElementById("confirm-popup").style.display = "none";
+}
+</script>
+{% endblock %}

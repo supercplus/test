@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/read.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <!-- Header Section -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <img src="{{ url_for('static', filename='img/cslogo.png') }}" height="70" class="ms-5">
+                <a class="navbar-brand ms-2" href="{{ url_for('homepage') }}">Computer Science Research</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
+                    <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+                        <li class="nav-item me-5">
+                            <a href="{{ url_for('homepage') }}" class="active">Home</a>
+                        </li>
+                        <li class="nav-item me-5">
+                            <a href="{{ url_for('research') }}" class="research">Research</a>
+                        </li>
+                        <li class="nav-item me-5">
+                            <a href="https://www.cs.science.cmu.ac.th/" class="aboutus">About us</a>
+                        </li>
+                        <li class="nav-item me-5">
+                            <a href="{{ url_for('contact') }}" class="contact">Contact</a>
+                        </li>
+                        <li class="nav-item me-5">
+                            <a href="{{ url_for('homepage') }}" class="nav-link">Logout</a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Project Details Section -->
+    <div class="container mt-4">
+        <div class="project-details">
+            <h3 id="projectName"><strong>{{ project_name }}</strong></h3>
+            <p id="category"><strong>Category</strong>: {{ category }}</p>
+            <p id="degree"><strong>Degree</strong>: {{ degree }}</p>
+            <p id="academicYear"><strong>Year</strong> : {{ academicYear }}</p>
+            <p id="instructor"><strong>Instructor</strong>: {{ instructor }}</p>
+            <p id="type"><strong>Type</strong>:{{ type }}</p>
+            <p id="abstract"><strong>Abstract</strong>: {{ abstract }}</p>
+        </div>
+
+        <!-- แสดงไฟล์ตามประเภท -->
+        <div id="fileDisplayArea">
+            {% if is_pdf %}
+            <!-- แสดง PDF ด้วย iframe #toolbar=0-->
+            <iframe src="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}" style="width: 100%; height: calc(100vh - 10px);" frameborder="0"></iframe>
+
+            {% elif is_image %}
+            <!-- แสดงรูปภาพ -->
+            <img src="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}" alt="Project Image" class="img-fluid">
+            
+            {% elif is_document %}
+            <!-- ลิงก์ดาวน์โหลดสำหรับ DOC -->
+            <p>Download link: <a href="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}" class="btn btn-primary" download>Download Document</a></p>
+            <!-- แสดง DOC หรือ DOCX ผ่าน Google Docs Viewer -->
+            <!-- <iframe src="https://docs.google.com/gview?url={{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}&embedded=true" style="width: 100%; height: calc(100vh - 10px);" frameborder="0"></iframe> -->
+            
+            {% elif is_zip %}
+            <!-- ลิงก์ดาวน์โหลดสำหรับ ZIP -->
+            <p>Download link: <a href="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}" class="btn btn-primary" download>Download ZIP</a></p>
+            
+            {% else %}
+            <p>No file to display.</p>
+            {% endif %}
+        </div>
+        
+
+        <!-- Views and Downloads Count -->
+        <!-- <p class="text-center">
+            <i class="fa fa-eye"></i> <span id="viewCount">{{ viewCount }}</span> Views &nbsp;&nbsp;&nbsp;
+        </p> -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

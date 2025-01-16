@@ -1,0 +1,305 @@
+*{
+    margin: 0;
+}
+
+.content {
+    box-sizing: border-box;  
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content { 
+      margin-left: 0; /* No margin on small screens */
+  }
+  .data-container {
+    margin-left: 0;
+  }
+}
+
+.header-bar {
+    display: flex;
+    background-color: #00538C; 
+    color: #ffffff; 
+    padding: 10px; /* ระยะห่างด้านใน */
+    margin-left: 22%;
+    margin-right: 5%;
+    margin-top: 5px;
+}
+
+
+.header-item {
+    flex: 1; /* ให้แต่ละหัวข้อขยายเต็มพื้นที่ */
+    text-align: center; 
+    font-weight: bold; 
+}
+
+.data-container {
+    height: 460px; /* กำหนดความสูง */
+    overflow-y: auto; /* เปิดการเลื่อนแนวตั้ง */
+    margin-left: 22%;
+    margin-right: 5%;
+    margin-top: 10px; /* ระยะห่างระหว่าง header-bar และข้อมูล */
+    border-bottom: 1px solid #ccc; /* ขอบด้านล่าง */
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #000;
+}
+
+.data-row {
+    display: flex; /* ใช้ Flexbox เพื่อจัดแถว */
+    padding: 10px; /* ระยะห่างด้านใน */
+    margin: 5px 0; /* ระยะห่างระหว่างแถว */
+    align-items: center; /* จัดให้ข้อมูลอยู่กลาง */
+    box-sizing: border-box; /* ทำให้ padding รวมในขนาด */
+    border-bottom: 1px solid #000000; /* ขอบด้านล่าง */
+}
+
+.data-row:last-child {
+    border-bottom: none; /* ลบขอบด้านล่างของแถวสุดท้าย */
+}
+
+.data-item,
+.Role,
+.email {
+    flex: 1; /* ให้แต่ละข้อมูลขยายเต็มพื้นที่ */
+    text-align: center; /* จัดข้อความให้อยู่กลาง */
+    border-right: 1px solid #000000; /* ขอบด้านขวาของแต่ละข้อมูล */
+}
+
+.email {
+    border-right: none; /* ลบขอบด้านขวาของข้อมูลสุดท้าย */
+}
+
+.add-button-container {
+    display: flex;
+    justify-content: center; /* จัดให้อยู่กลาง */
+    margin-top: 20px; /* ระยะห่างด้านบน */
+    margin-left: 20%;
+    align-items: center;
+    /* background-color: #ffffff; */
+}
+
+.add-button {
+    background-color: #00C000; /* สีพื้นหลังของปุ่ม */
+    color: white; /* สีข้อความ */
+    border: none; /* ลบขอบ */
+    padding: 10px 40px; /* ระยะห่างภายใน */
+    border-radius: 5px; /* ขอบโค้งมน */
+    cursor: pointer; /* แสดงให้เห็นว่าเป็นปุ่มคลิกได้ */
+    font-size: 20px; /* ขนาดตัวอักษร */
+}
+
+.add-button:hover {
+    background-color: #003f6b; /* สีพื้นหลังเมื่อชี้เมาส์ */
+    transform: scale(1.02);
+}
+
+.action-buttons {
+    flex: 1; /* ให้แต่ละข้อมูลขยายเต็มพื้นที่ */
+    display: flex; /* ใช้ Flexbox เพื่อจัดปุ่ม */
+    gap: 10px; /* ระยะห่างระหว่างปุ่ม */
+    justify-content: center; /* จัดปุ่มให้อยู่กลาง */
+}
+
+.edit-button, .delete-button {
+    background-color: #00538C; /* สีพื้นหลังของปุ่ม */
+    color: white; /* สีข้อความ */
+    border: none; /* ลบขอบ */
+    padding: 5px 10px; /* ระยะห่างภายใน */
+    border-radius: 5px; /* ขอบโค้งมน */
+    cursor: pointer; /* แสดงให้เห็นว่าเป็นปุ่มคลิกได้ */
+    font-size: 14px; /* ขนาดตัวอักษร */
+}
+
+.edit-button:hover {
+    transform: scale(1.02);
+    background-color: #003f6b; /* สีพื้นหลังเมื่อชี้เมาส์ */
+}
+
+.delete-button {
+    background-color: red; /* สีพื้นหลังของปุ่ม Delete */
+}
+
+.delete-button:hover {
+    transform: scale(1.02);
+    background-color: red; /* สีพื้นหลังเมื่อชี้เมาส์ */
+}
+
+.popup {
+    display: none; /* เริ่มต้นซ่อน */
+    position: fixed;
+    z-index: 1000; /* ให้สูงสุดเพื่ออยู่ด้านหน้า */
+    left: 0;
+    top: 0;
+    width: 100%; /* เต็มหน้าจอ */
+    height: 100%; /* เต็มหน้าจอ */
+    overflow: auto; /* เปิดการเลื่อน */
+    background-color: rgba(0, 0, 0, 0.5); /* พื้นหลังสีดำโปร่งแสง */
+}
+
+.popup-content {
+    background-color: #fff;
+    margin: 15% auto; /* อยู่กลาง */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 350px; /* กำหนดขนาด */
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* จัดแนวข้อความ */
+    align-items: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+    justify-content: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+    text-align: center; /* จัดให้ข้อความอยู่ตรงกลาง */
+}
+
+
+select {
+    width: 100%; /* ทำให้ select กว้างเต็ม */
+    padding: 5px; /* ระยะห่างภายใน */
+    margin: 10px 0; /* ระยะห่างด้านบนและล่าง */
+}
+
+.button-container {
+    display: flex; /* ใช้ Flexbox เพื่อจัดปุ่ม */
+    justify-content: space-between; /* จัดปุ่มให้มีระยะห่าง */
+    margin-top: 10px; /* ระยะห่างด้านบน */
+}
+
+.cancel-button {
+    background-color: red; /* สีพื้นหลังปุ่ม Cancel */
+    color: white; /* สีข้อความ */
+    border: none; /* ลบขอบ */
+    padding: 5px 10px; /* ระยะห่างภายใน */
+    border-radius: 5px; /* ขอบโค้งมน */
+    cursor: pointer; /* แสดงให้เห็นว่าเป็นปุ่มคลิกได้ */
+    transform: scale(1.02);
+}
+
+.cancel-button:hover {
+    background-color: red; /* สีพื้นหลังเมื่อชี้เมาส์ */
+}
+
+.confirm-button {
+    background-color: #00C000; /* สีพื้นหลังปุ่ม Confirm */
+    color: white; /* สีข้อความ */
+    border: none; /* ลบขอบ */
+    padding: 5px 10px; /* ระยะห่างภายใน */
+    border-radius: 5px; /* ขอบโค้งมน */
+    cursor: pointer; /* แสดงให้เห็นว่าเป็นปุ่มคลิกได้ */
+    transform: scale(1.02);
+}
+
+.confirm-button:hover {
+    background-color: #00C000; /* สีพื้นหลังเมื่อชี้เมาส์ */
+}
+
+.form-group {
+    display: flex; /* ใช้ Flexbox */
+    align-items: center; /* จัดให้ตรงกลางในแนวตั้ง */
+}
+
+.form-group select {
+    width: 200px;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+}
+.form-group input {
+    width: 200px;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+.form-group label {
+    margin-right: 10px; /* ระยะห่างระหว่าง label และ input */
+    width: 100px; /* กำหนดความกว้างของ label */
+}
+
+.popup-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.confirm-delete {
+    background-color: #00C000;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.confirm-delete:hover {
+    background-color: #00C000; /* สีเข้มขึ้นเมื่อชี้เมาส์ */
+}
+
+.popup-content {
+    background-color: #fff;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 350px; 
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column; /* จัดแนวข้อความเป็นแนวตั้ง */
+    align-items: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+    justify-content: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+    text-align: center; 
+    gap: 10px; /* ลดระยะห่างระหว่างองค์ประกอบ */
+}
+
+#confirm-message {
+    margin-bottom: 10px; /* ลดระยะห่างระหว่างข้อความและปุ่ม */
+    color: black; 
+    /* font-weight: bold;  */
+    font-size: 18px;
+}
+
+.popup-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px; /* ลดระยะห่างจากข้อความยืนยัน */
+    gap: 10px;
+}
+
+
+#approve-message{
+    margin-bottom: 10px; /* ลดระยะห่างระหว่างข้อความและปุ่ม */
+    color: black; 
+    /* font-weight: bold;  */
+    font-size: 18px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

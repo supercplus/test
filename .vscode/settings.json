@@ -1,0 +1,29 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "Project",
+<<<<<<< HEAD
+            "database": "Project",
+            "username": "hello_flask"
+=======
+            "database": "project",
+            "username": "hello_flask",
+            "password": "hello_flask"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "flask-app1_db_1",
+            "database": "project",
+            "username": "hello_flask",
+            "password": "hello_flask"
+>>>>>>> main
+        }
+    ]
+}

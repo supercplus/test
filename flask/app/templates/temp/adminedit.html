@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit My Research</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/editmyresearch.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <img src="{{ url_for('static', filename='img/cslogo.png') }}" height="70" class="ms-5">
+            <a class="navbar-brand ms-2" href="{{ url_for('homepage') }}">Computer Science Research</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
+                <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+                    <li class="nav-item me-5">
+                        <a href="{{ url_for('homepage') }}" class="active">Home</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a href="{{ url_for('myresearch_admin',project_id=project_id) }}" class="research">My
+                            Research</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a href="https://www.cs.science.cmu.ac.th/" class="aboutus">About us</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a href="{{ url_for('contact') }}" class="contact">Contact</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a href="{{ url_for('homepage') }}" class="logout">Logout</a>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header text-center">
+        <h1>Edit Research</h1>
+    </div>
+
+    <div class="container">
+        <div class="row equal-height justify-content-center">
+            <div class="col-md-12">
+                <div class="form-container w-100">
+                    <form id="projectForm" onsubmit="handleSubmit(event)" data-project-id="{{ project_id }}"
+                        method="POST" enctype="multipart/form-data">
+
+                        <!-- Personal Details -->
+                        <h4 class="text-center">Personal Details</h4>
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" name="first_name"
+                                value="{{ student.firstname }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" name="last_name"
+                                value="{{ student.lastname }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="stu_id" class="form-label">Student ID</label>
+                            <input type="text" class="form-control" id="stu_id" name="stu_id"
+                                value="{{ student.stu_id }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">CMU Mail</label>
+                            <input type="text" class="form-control" id="email" name="email" value="{{ student.email }}">
+                        </div>
+
+                        <!-- Project Details -->
+                        <h4 class="text-center">Project Details</h4>
+                        <div class="mb-3">
+                            <label for="projectName" class="form-label">Project Name</label>
+                            <input type="text" class="form-control" id="projectName" name="project_name"
+                                value="{{ project['project_name'] }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="academicYear" class="form-label">Academic Year</label>
+                            <select class="form-select" id="academicYear" name="academic_year">
+                                <option value="{{project['academic_year'] }}" selected>{{project['academic_year'] }}
+                                </option>
+                                <script>
+                                    const currentYear = new Date().getFullYear() + 543; // เปลี่ยนเป็นปีพุทธศักราช
+                                    for (let year = currentYear; year >= 2543; year--) {
+                                        document.write(`<option value="${year}">${year}</option>`);
+                                    }
+                                </script>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-select" id="category" name="category">
+                                    <option value="{{ project['category']}}" selected>{{ project['category']}}</option>
+                                    <option value="Web App">Web App</option>
+                                    <option value="Machine Learning">Machine Learning</option>
+                                    <option value="Image Processing">Image Processing</option>
+                                    <option value="Games">Games</option>
+                                    <option value="Data Classification">Data Classification</option>
+                                    <option value="Data Analysis">Data Analysis</option>
+                                    <option value="Database">Database</option>
+                                    <option value="IoT">IoT</option>
+                                    <option value="Network">Network</option>
+                                    <option value="Windows App">Windows App</option>
+                                    <option value="Security">Security</option>
+                                    <option value="Simulation">Simulation</option>
+                                    <option value="Data Warehouse">Data Warehouse</option>
+                                    <option value="Virtual Reality">Virtual Reality</option>
+                                    <option value="Other Categories">Other Categories</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="degree" class="form-label">Degree</label>
+                                <select class="form-select" id="degree" name="degree">
+                                    <option value="{{ project['degree'] }}" selected>{{ project['degree'] }}</option>
+                                    <option value="Bachelor">Bachelor</option>
+                                    <option value="Master">Master</option>
+                                    <option value="PhD">PhD</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="type" class="form-label">Type</label>
+                                <select class="form-select" id="type" name="type">
+                                    <option value="{{ project['project_type'] }}" selected>{{ project['project_type'] }}
+                                    </option>
+                                    <option value="204499">204499</option>
+                                    <option value="Co-operative">Co-operative</option>
+                                    <option value="Other Type">Other Type</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="instructor" class="form-label">Instructor</label>
+                                <select class="form-select" id="instructor" name="instructor">
+                                    <option value="{{project['instructor'] }}" selected>{{project['instructor'] }}
+                                    </option>
+                                    <option value="Dr.Ratsameetip Wita">Assistant Professor Dr. Ratsameetip Wita
+                                    </option>
+                                    <option value="Dr.Jakramate Bootkrajang">Associate Professor Dr. Jakramate
+                                        Bootkrajang</option>
+                                    <option value="Dr.Prakarn Unachak">Assistant Professor Dr. Prakarn Unachak
+                                    </option>
+                                    <option value="Dr.Sutasinee Thovuttikul">Dr. Sutasinee Thovuttikul</option>
+                                    <option value="Dr.Thapanapong Rukkanchanunt">Dr. Thapanapong Rukkanchanunt
+                                    </option>
+                                    <option value="Dr.Rattasit Sukhahuta">Associate Professor Dr. Rattasit Sukhahuta
+                                    </option>
+                                    <option value="Dr.Ekkarat Boonchieng">Associate Professor Dr. Ekkarat Boonchieng
+                                    </option>
+                                    <option value="Dr.Dussadee Praserttitipong">Assistant Professor Dr. Dussadee
+                                        Praserttitipong</option>
+                                    <option value="Dr.Suphakit Awiphan">Assistant Professor Dr. Suphakit Awiphan
+                                    </option>
+                                    <option value="Dr.Wijak Srisujjalertwaja">Assistant Professor Dr. Wijak
+                                        Srisujjalertwaja</option>
+                                    <option value="Dr.Worawut Srisukkham">Dr. Worawut Srisukkham</option>
+                                    <option value="Dr.Papangkorn Inkeaw">Assistant Professor Dr. Papangkorn Inkeaw
+                                    </option>
+                                    <option value="Dr.Kornprom Pikulkaew">Assistant Professor Dr. Kornprom Pikulkaew
+                                    </option>
+                                    <option value="Dr.Jeerayut Chaijaruwanich">Associate Professor Dr. Jeerayut
+                                        Chaijaruwanich</option>
+                                    <option value="Dr.Chumphol Bunkhumpornpat">Associate Professor Dr. Chumphol
+                                        Bunkhumpornpat</option>
+                                    <option value="Dr.Varin Chouvatut">Associate Professor Dr. Varin Chouvatut
+                                    </option>
+                                    <option value="Dr.Wattana Jindaluang">Associate Professor Dr. Wattana Jindaluang
+                                    </option>
+                                    <option value="Dr.Samerkae Somhom">Assistant Professor Dr. Samerkae Somhom
+                                    </option>
+                                    <option value="Dr.Areerat Trongratsameethong">Assistant Professor Dr. Areerat
+                                        Trongratsameethong</option>
+                                    <option value="Dr.Jakarin Chawachat">Assistant Professor Dr. Jakarin Chawachat
+                                    </option>
+                                    <option value="Dr.Prapaporn Techa-Angkoon">Assistant Professor Dr. Prapaporn
+                                        Techa-Angkoon</option>
+                                    <option value="Wassana Naiyapo">Assistant Professor Wassana Naiyapo</option>
+                                    <option value="Benjamas Panyangam">Assistant Professor Benjamas Panyangam
+                                    </option>
+                                    <option value="Noparut Vanitchanant">Noparut Vanitchanant</option>
+                                    <option value="Dr.Kamonphop Srisopha">Dr. Kamonphop Srisopha</option>
+                                    <option value="Kittipitch Kuptavanich">Kittipitch Kuptavanich</option>
+                                    <option value="Sitthichoke Subpaiboonkit">Sitthichoke Subpaiboonkit</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="abstract" class="form-label">Abstract</label>
+                            <textarea class="form-control" id="abstract" name="abstract"
+                                rows="3">{{ project['description'] }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Choose or Change File</label>
+                            <input type="file" class="form-control" id="file" name="file">
+                            <small>Current File: {{ project['file_path'] }}</small>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" id="editBtn" class="btn btn-success">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        fetch(`/api/myresearch/${projectId}`, {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => {
+                console.log(`Response status: ${response.status}`);
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok. Status code: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    alert('ข้อมูลและไฟล์ถูกส่งเรียบร้อยแล้ว!');
+                    window.location.href = `/api/myresearch/${projectId}`;
+                } else {
+                    console.error('Response Error:', data.error);
+                    alert('การส่งข้อมูลล้มเหลว กรุณาลองใหม่');
+                }
+            })
+            .catch(error => {
+                console.error('เกิดข้อผิดพลาดในการส่งแบบฟอร์ม:', error);
+                alert(`เกิดปัญหาในการส่งแบบฟอร์ม: ${error.message}`);
+            });
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            console.log("Form is submitted!");
+
+            const form = document.getElementById('projectForm');
+            const formData = new FormData(form);
+            const projectId = form.getAttribute('data-project-id');
+
+            // ตรวจสอบและลบค่าที่ไม่ได้เปลี่ยนแปลงหรือว่างออก
+            for (let pair of formData.entries()) {
+                if (!pair[1]) {
+                    formData.delete(pair[0]);
+                }
+            }
+
+            console.log(projectId);
+            for (let pair of formData.entries()) {
+                console.log(`${pair[0]}: ${pair[1]}`);
+            }
+
+            if (confirm("คุณแน่ใจหรือไม่ว่าต้องการส่งการเปลี่ยนแปลง?")) {
+                fetch(`/api/myresearch/${projectId}`, {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(response => {
+                        console.log(`Response status: ${response.status}`);
+                        if (!response.ok) {
+                            throw new Error(`Network response was not ok. Status code: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                        if (data.success) {
+                            alert('ข้อมูลและไฟล์ถูกส่งเรียบร้อยแล้ว!');
+                            window.location.href = '/file'; // เปลี่ยนเส้นทางไปที่หน้า /file
+                        } else {
+                            console.error('Response Error:', data.error);
+                            alert('การส่งข้อมูลล้มเหลว กรุณาลองใหม่');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('เกิดข้อผิดพลาดในการส่งแบบฟอร์ม:', error);
+                        alert(`เกิดปัญหาในการส่งแบบฟอร์ม: ${error.message}`);
+                    });
+            } else {
+                alert('การเปลี่ยนแปลงถูกยกเลิก');
+            }
+        }
+
+    </script>
+</body>
+
+</html>
