@@ -30,7 +30,8 @@
                         </li>
                         <li class="nav-item">
                             {% if project_id is defined and project_id is not none %}
-                                <a href="{{ url_for('myresearch', project_id=project_id) }}" class="research">My Research</a>
+                                <a href="
+                                {{ url_for('myresearch', encoded_project_id=project_id) }}" class="research">My Research</a>
                             {% else %}
                                 <a href="#" onclick="alert('No project selected.');" class="research">My Research</a>
                             {% endif %}

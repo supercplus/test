@@ -31,7 +31,7 @@
                         <a href="{{ url_for('homepage') }}" class="active">Home</a>
                     </li>
                     <li class="nav-item me-5">
-                        <a href="{{ url_for('myresearch',project_id=project_id) }}" class="research">My Research</a>
+                        <a href="{{ url_for('myresearch', encoded_project_id=project_id) }}" class="research">My Research</a>
                     </li>
                     <li class="nav-item me-5">
                         <a href="https://www.cs.science.cmu.ac.th/" class="aboutus">About us</a>
@@ -93,7 +93,7 @@
                             <label for="academicYear" class="form-label">Academic Year</label>
                             <select class="form-select" id="academicYear" name="academic_year"
                                 value="{{project['academic_year'] }}" disabled>
-                                <option value="{{project['academic_year'] }}" {% if year == project['academic_year'] %}selected disabled{% endif %} disabled selected>
+                                <option value="{{project['academic_year'] }}"  disabled selected>
                                     {{project['academic_year'] }}</option>
                                 <script>
                                     const currentYear = new Date().getFullYear() + 543; // เปลี่ยนเป็นปีพุทธศักราช

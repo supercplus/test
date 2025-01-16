@@ -36,7 +36,7 @@
                 .then(data => {
                     if (data.success) {
                         // ถ้าส่งข้อมูลสำเร็จ ให้เปลี่ยนหน้าไปยัง myresearch
-                        window.location.href = "{{ url_for('myresearch', project_id=0) }}".replace('0', data.project_id);
+                        window.location.href = "{{ url_for('myresearch', encoded_project_id=0) }}".replace('0', data.encoded_project_id);
                     } else if (data.error === 'Project already exists for this student') {
                         alert('ไม่สามารถเพิ่มโปรเจ็กต์ได้ เนื่องจากมีโปรเจ็กต์อยู่แล้ว');
                     } else {

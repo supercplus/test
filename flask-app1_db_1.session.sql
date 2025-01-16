@@ -104,6 +104,7 @@ CREATE TABLE IF NOT EXISTS project_degree (
 --     'Super_Admin',
 --     'waraporn_sonwai@cmu.ac.th'
 --   );
+
 -- SELECT * FROM student;
 
 -- DELETE FROM student WHERE stu_id = 65051664;

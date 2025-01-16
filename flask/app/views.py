@@ -18,6 +18,8 @@ from flask import send_from_directory
 import base64
 from app import socketio
 from flask_socketio import emit
+from flask import url_for
+
 
 
 
@@ -474,8 +476,8 @@ def project():
                 conn.commit()
                 
                 print("Data inserted successfully")
-
-                return jsonify({'success': True, 'message': 'File uploaded successfully', 'file_path': file_path,'project_id':project_id}), 201
+                encoded_project_id = encode_id(project_id)
+                return jsonify({'success': True, 'message': 'File uploaded successfully', 'file_path': file_path,'project_id':encoded_project_id}), 201
 
             except Exception as e:
                 conn.rollback()  # Rollback in case of error
@@ -539,12 +541,18 @@ def homerequest():
         project_id = None
     else:
         project_id = project_id_row[0]
+    encoded_project_id = encode_id(project_id)  # ใช้ฟังก์ชันเข้ารหัส
+    return render_template('temp/homerequest.html', project_id=encoded_project_id)
 
-    return render_template('temp/homerequest.html', project_id=project_id)
+    #return render_template('temp/homerequest.html', project_id=project_id)
 
 @app.route('/research')
 def research():
     return render_template('temp/research.html')
+
+@app.route('/myresearch/all')
+def research():
+    return render_template('temp/allmyresearch.html')
 
 # ฟังก์ชันเข้ารหัส ID ด้วย base64
 def encode_id(id):
@@ -553,9 +561,21 @@ def encode_id(id):
     return encoded_str
 # ฟังก์ชันถอดรหัส ID ด้วย base64
 def decode_id(encoded_str):
-    decoded_bytes = base64.urlsafe_b64decode(encoded_str.encode("utf-8"))
-    decoded_str = str(decoded_bytes, "utf-8")
-    return int(decoded_str)
+    print(encoded_str)
+    try:
+        missing_padding = len(encoded_str) % 4
+        if missing_padding:
+            encoded_str += '=' * (4 - missing_padding) 
+        # ถอดรหัส Base64
+        decoded_bytes = base64.urlsafe_b64decode(encoded_str.encode("utf-8"))
+        
+        # แปลงเป็นสตริงและแปลงเป็นตัวเลข
+        decoded_str = str(decoded_bytes, "utf-8")
+        return int(decoded_str)  # แปลงเป็น integer
+    except (ValueError, base64.binascii.Error) as e:
+        # จัดการกรณีที่เกิดข้อผิดพลาดในการถอดรหัส
+        app.logger.error(f"Error decoding base64 string: {str(e)}")
+        return None
 
 def generate_hashed_filename(filename):
     return hashlib.md5(filename.encode()).hexdigest()
@@ -563,9 +583,10 @@ def generate_hashed_filename(filename):
 @app.route('/readresearch/<encoded_project_id>')
 def readresearch(encoded_project_id):
     # ถอดรหัส ID จาก URL
-    #print(encoded_project_id)
+    print(encoded_project_id)
     try:
         project_id = decode_id(encoded_project_id)
+        print(project_id)
     except Exception as e:
         return "Invalid encoded project ID", 400
     project = get_project_by_id(int(project_id))
@@ -1381,9 +1402,17 @@ def get_or_create_entry(cursor, table, key_column, value, return_column):
         return cursor.fetchone()[0]
     return result[0]
 
-@app.route('/api/myresearch/<int:project_id>', methods=['GET', 'POST'])
-def myresearch(project_id=None):
+
+
+@app.route('/api/myresearch/<encoded_project_id>', methods=['GET', 'POST'])
+def myresearch(encoded_project_id):
     try:
+        try:
+            project_id = decode_id(encoded_project_id)  
+            print(project_id)
+        except Exception as e:
+            return jsonify({'error': 'Invalid encoded project ID', 'details': str(e)}), 400
+
         # Ensure the user is logged in by checking if the email is in session
         email = session.get('email')
         if not email:
@@ -1391,7 +1420,7 @@ def myresearch(project_id=None):
 
         # Get admin status from session
         is_admin = session.get('is_admin', False)
-        
+
         # Connect to the database
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -1455,7 +1484,7 @@ def myresearch(project_id=None):
                 'email': student[3]
             }
 
-            return render_template('temp/editmyresearch.html', project=project_data, student=student_data, project_id=project_id)
+            return render_template('temp/editmyresearch.html', project=project_data, student=student_data, project_id=encoded_project_id)
 
         elif request.method == 'POST':
             # Logic for POST request (update project data)
