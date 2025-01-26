@@ -15,7 +15,6 @@
 </head>
 
 <body>
-
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <img src="{{ url_for('static', filename='img/cslogo.png') }}" height="70" class="ms-5">
@@ -28,10 +27,10 @@
             <div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
                 <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                     <li class="nav-item me-5">
-                        <a href="{{ url_for('homepage') }}" class="active">Home</a>
+                        <a href="{{ url_for('homerequest') }}" class="active">Home</a>
                     </li>
                     <li class="nav-item me-5">
-                        <a href="{{ url_for('myresearch', encoded_project_id=project_id) }}" class="research">My Research</a>
+                        <a href="{{ url_for('allmyresearch', stu_id=stu_id) }}" class="research">My Research</a>
                     </li>
                     <li class="nav-item me-5">
                         <a href="https://www.cs.science.cmu.ac.th/" class="aboutus">About us</a>
@@ -87,19 +86,20 @@
                         <div class="mb-3">
                             <label for="projectName" class="form-label">Project Name</label>
                             <input type="text" class="form-control" id="projectName" name="project_name"
-                                value="{{ project['project_name'] }}" readonly>
+                                value="{{ project['project_name'] }}" readonly required>
                         </div>
                         <div class="mb-3">
                             <label for="academicYear" class="form-label">Academic Year</label>
                             <select class="form-select" id="academicYear" name="academic_year"
-                                value="{{project['academic_year'] }}" disabled>
-                                <option value="{{project['academic_year'] }}"  disabled selected>
+                                value="{{project['academic_year'] }}" disabled required>
+                                <option value="{{project['academic_year'] }}" disabled selected>
                                     {{project['academic_year'] }}</option>
                                 <script>
                                     const currentYear = new Date().getFullYear() + 543; // เปลี่ยนเป็นปีพุทธศักราช
+                                    const academicYear = {{ project['academic_year'] }};
                                     for (let year = currentYear; year >= 2543; year--) {
-                                        const selected = year == {{ project['academic_year'] }} ?'selected' : '';
-                                    document.write(`<option value="${year}" ${selected}>${year}</option>`);
+                                        const selected = year == academicYear ? 'selected' : '';
+                                        document.write(`<option value="${year}" ${selected}>${year}</option>`);
                                     }
                                 </script>
                             </select>
@@ -107,9 +107,10 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="category" class="form-label">Category</label>
-                                <select class="form-select" id="category" name="category" 
-                                value="{{project['category']}}"disabled>
-                                <option value="{{ project['category'] }}" selected>{{ project['category'] }}</option>
+                                <select class="form-select" id="category" name="category"
+                                    value="{{project['category']}}" disabled required>
+                                    <option value="{{ project['category'] }}" selected>{{ project['category'] }}
+                                    </option>
                                     <option value="Web App">Web App</option>
                                     <option value="Machine Learning">Machine Learning</option>
                                     <option value="Image Processing">Image Processing</option>
@@ -129,7 +130,8 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="degree" class="form-label">Degree</label>
-                                <select class="form-select" id="degree" name="degree" value="{{project['degree']}}" disabled>
+                                <select class="form-select" id="degree" name="degree" value="{{project['degree']}}"
+                                    disabled required>
                                     <option value="{{ project['degree'] }}" selected>{{ project['degree'] }}</option>
                                     <option value="Bachelor">Bachelor</option>
                                     <option value="Master">Master</option>
@@ -141,7 +143,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="type" class="form-label">Type</label>
-                                <select class="form-select" id="type" name="type" disabled>
+                                <select class="form-select" id="type" name="type" disabled required>
                                     <option value="{{ project['project_type'] }}" selected>{{
                                         project['project_type'] }}</option>
                                     <option value="204499">204499</option>
@@ -151,7 +153,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="instructor" class="form-label">Instructor</label>
-                                <select class="form-select" id="instructor" name="instructor" disabled>
+                                <select class="form-select" id="instructor" name="instructor" disabled required>
                                     <option value="{{project['instructor'] }}" selected>
                                         {{project['instructor']}}</option>
                                     <option value="Dr.Ratsameetip Wita">Assistant Professor Dr. Ratsameetip Wita
@@ -207,19 +209,22 @@
 
                         <div class="mb-3">
                             <label for="abstract" class="form-label">Abstract</label>
-                            <textarea class="form-control" id="abstract" name="abstract" rows="3"
-                                readonly>{{ project['description'] }}</textarea>
+                            <textarea class="form-control" id="abstract" name="abstract" rows="3" maxlength="150"
+                                required readonly>{{ project['description'] }}</textarea>
                         </div>
 
                         <div class="mb-3">
                             <label for="fileLabel" class="form-label">File name</label>
                             <label id="fileLabel" for="file" class="form-label">{{ project['file_path'] }}</label>
-                            <label for="chooseFileLabel" for="file" class="form-label" style="display:none;">Choose or
-                                Change File</label>
-                            <input type="file" class="form-control" id="file" name="file" style="display:none;"
-                                disabled>
 
+                            <!-- แสดงข้อความแจ้งเตือนเมื่อไฟล์ไม่ถูกต้อง -->
+                            <label for="chooseFileLabel" class="form-label" style="display:none;">Choose or Change
+                                File</label>
+                            <input type="file" class="form-control" id="file" name="file" style="display:none;"
+                            disabled
+                                required>{{ project['file_path'] }}
                         </div>
+
 
                         <div class="text-center">
                             <button type="button" id="editBtn" class="btn btn-success btn-edit"

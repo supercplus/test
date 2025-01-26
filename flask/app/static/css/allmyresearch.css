@@ -48,18 +48,20 @@
   
   .container-color {
     background-color: #00538C;
-    padding: 40px 20px;
+    padding: 20px 10px;
     width: 100%;
   }
   
-  
-  .search-section {
+  .text-white{
+    text-align: center;
+  }
+  /* .search-section {
     padding: 20px;
     margin-bottom: 20px;
     color: white;
     border-radius: 10px;
     text-align: center;
-  }
+  } */
   
   .filter-section {
     padding: 20px;
@@ -113,7 +115,7 @@
     font-size: 16px;
   }
   
-  .btn-search, .btn-clear {
+  /* .btn-search, .btn-clear {
     padding: 10px 20px;
     border: none;
     cursor: pointer;
@@ -121,9 +123,9 @@
     transition: background-color 0.3s;
     font-size: 16px;
     color: white;
-  }
+  } */
   
-  .btn-search {
+  /* .btn-search {
     background-color: #007bff;
   }
   
@@ -137,7 +139,7 @@
   
   .btn-clear:hover {
     background-color: #b95b5b;
-  }
+  } */
   
   .project-list {
     display: flex;
@@ -153,16 +155,24 @@
     margin-bottom: 20px;
   }
   
-  .project-card {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 100%;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
+  .button-container {
+    display: flex;
+    justify-content: flex-end; /* ทำให้ปุ่มชิดขวา */
+    gap: 0.5rem; /* เพิ่มระยะห่างระหว่างปุ่ม */
+    width: 100%; /* ใช้พื้นที่เต็มเพื่อให้ flex ทำงาน */
+}
+
+.project-card {
+  margin-left: 10px; /* ปรับขนาดตามที่ต้องการ */
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
   
   .project-card:hover {
     transform: translateY(-5px);

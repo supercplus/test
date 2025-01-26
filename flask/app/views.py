@@ -477,7 +477,7 @@ def project():
                 
                 print("Data inserted successfully")
                 encoded_project_id = encode_id(project_id)
-                return jsonify({'success': True, 'message': 'File uploaded successfully', 'file_path': file_path,'project_id':encoded_project_id}), 201
+                return jsonify({'success': True, 'message': 'File uploaded successfully', 'file_path': file_path,'encoded_project_id':encoded_project_id}), 201
 
             except Exception as e:
                 conn.rollback()  # Rollback in case of error
@@ -542,17 +542,101 @@ def homerequest():
     else:
         project_id = project_id_row[0]
     encoded_project_id = encode_id(project_id)  # ใช้ฟังก์ชันเข้ารหัส
-    return render_template('temp/homerequest.html', project_id=encoded_project_id)
-
-    #return render_template('temp/homerequest.html', project_id=project_id)
+    return render_template('temp/homerequest.html', project_id=encoded_project_id,stu_id=stu_id)
 
 @app.route('/research')
 def research():
     return render_template('temp/research.html')
 
-@app.route('/myresearch/all')
-def research():
-    return render_template('temp/allmyresearch.html')
+@app.route('/myresearch/all', methods=['GET'])
+def allmyresearch():
+    
+    email = session.get('email')
+    if not email:
+        return jsonify({'error': 'User not authenticated'}), 401
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT stu_id FROM student WHERE email = %s", (email,))
+    result = cursor.fetchone()
+    conn.close()
+
+    if result is None:
+        return jsonify({'error': 'Student ID not found for the provided email'}), 404
+
+    stu_id = result[0]
+    return render_template('temp/allmyresearch.html', stu_id=stu_id)
+
+@app.route('/api/projects/student/<int:student_id>', methods=['GET'])
+def get_projects_by_student(student_id):
+    # ดึงข้อมูลโปรเจกต์จากฐานข้อมูลตาม student_id
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    query = """
+    SELECT 
+        p.projectID, 
+        p.project_name AS name, 
+        p.description, 
+        p.year, 
+        d.degree AS degree, 
+        string_agg(DISTINCT c.categoryName, ', ') AS categories, 
+        string_agg(DISTINCT f.file_type, ', ') AS file_types, 
+        string_agg(DISTINCT s.name, ', ') AS supervisors
+    FROM 
+        project p
+    LEFT JOIN 
+        project_student ps ON p.projectID = ps.projectID
+    LEFT JOIN 
+        student st ON ps.stu_id = st.stu_id
+    LEFT JOIN 
+        project_degree pd ON p.projectID = pd.projectID
+    LEFT JOIN 
+        degree d ON pd.degreeID = d.degreeID
+    LEFT JOIN 
+        project_category pc ON p.projectID = pc.projectID
+    LEFT JOIN 
+        category c ON pc.categoryID = c.categoryID
+    LEFT JOIN 
+        project_filetype pf ON p.projectID = pf.projectID
+    LEFT JOIN 
+        file_type f ON pf.fileID = f.fileID
+    LEFT JOIN 
+        project_supervisor psup ON p.projectID = psup.projectID
+    LEFT JOIN 
+        supervisor s ON psup.supervisorID = s.supervisorID
+    WHERE 
+        st.stu_id = %s
+    GROUP BY 
+        p.projectID, d.degree;
+    """
+    
+    cursor.execute(query, (student_id,))
+    projects = cursor.fetchall()  
+    cursor.close()
+    conn.close()
+    
+    # แปลงข้อมูลเป็นลิสต์ของ dictionary
+    formatted_projects = []
+    for row in projects:
+        project_id = row[0]
+        encoded_project_id = encode_id(project_id)  # ใส่ฟังก์ชันเข้ารหัส ID ที่คุณใช้อยู่
+        formatted_projects.append({
+            'encoded_project_id': encoded_project_id,
+            'name': row[1],
+            'description': row[2],
+            'year': row[3],
+            'degree': row[4],
+            'categories': row[5],
+            'file_types': row[6],
+            'supervisors': row[7]
+        })
+        print(formatted_projects)
+        
+    
+    return jsonify(formatted_projects)
+
+
 
 # ฟังก์ชันเข้ารหัส ID ด้วย base64
 def encode_id(id):
@@ -1504,7 +1588,10 @@ def myresearch(encoded_project_id):
                 filename = secure_filename(file.filename)
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(file_path)
-
+                flash('File uploaded successfully!', 'success')
+            else:
+                flash('No file uploaded or invalid file type.', 'error')
+                
             # Get other form data
             project_name = request.form.get('project_name')
             year = request.form.get('academic_year')

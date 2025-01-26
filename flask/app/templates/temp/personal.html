@@ -25,11 +25,11 @@
         <div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
           <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
             <li class="nav-item me-5">
-                <a href="{{ url_for('homepage') }}" class="active">Home</a>
+                <a href="{{ url_for('homerequest') }}" class="active">Home</a>
             </li>
             <li class="nav-item me-5">
               {% if project_id %}
-                <a href="{{ url_for('myresearch', encoded_project_id=project_id) }}" class="research">My Research</a>
+              <a href="{{ url_for('allmyresearch', stu_id=stu_id) }}" class="research">My Research</a>
               {% endif %}
             </li>
             <li class="nav-item me-5">

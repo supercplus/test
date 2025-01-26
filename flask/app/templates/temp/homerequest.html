@@ -26,12 +26,12 @@
                 <div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
                     <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                         <li class="nav-item">
-                            <a href="{{ url_for('homepage') }}" class="active">Home</a>
+                            <a href="{{ url_for('homerequest') }}" class="active">Home</a>
                         </li>
                         <li class="nav-item">
                             {% if project_id is defined and project_id is not none %}
                                 <a href="
-                                {{ url_for('myresearch', encoded_project_id=project_id) }}" class="research">My Research</a>
+                                {{ url_for('allmyresearch', stu_id=stu_id) }}" class="research">My Research</a>
                             {% else %}
                                 <a href="#" onclick="alert('No project selected.');" class="research">My Research</a>
                             {% endif %}
