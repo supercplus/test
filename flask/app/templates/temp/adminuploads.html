@@ -55,18 +55,22 @@
                 <div class="mb-3">
                     <label for="firstName" class="form-label">First Name</label>
                     <input type="text" class="form-control" id="firstName" name="firstName" required>
+                    <div id="firstNameError" class="text-danger mt-1"></div>
                 </div>
                 <div class="mb-3">
                     <label for="lastName" class="form-label">Last Name</label>
                     <input type="text" class="form-control" id="lastName" name="lastName" required>
+                    <div id="lastNameError" class="text-danger mt-1"></div>
                 </div>
                 <div class="mb-3">
                     <label for="studentId" class="form-label">Student ID</label>
                     <input type="text" class="form-control" id="studentId" name="student_id" required>
+                    <div id="studentIdError" class="text-danger mt-1"></div>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">CMU Mail</label>
                     <input type="email" class="form-control" id="email" name="email" required>
+                    <div id="emailError" class="text-danger mt-1"></div>
                 </div>
 
                 <div class="mb-3">
@@ -206,7 +210,10 @@
 
     <script>
         function handleSubmit(event) {
-            event.preventDefault();
+            event.preventDefault(); // หยุดการส่งฟอร์มก่อน
+            if (!validateForm()) {
+                return; // ถ้ามีข้อผิดพลาด ให้ไม่ส่งฟอร์ม
+            }
             const form = new FormData(document.getElementById('projectForm'));
             console.log(form)
             for (let pair of form.entries()) {
@@ -249,6 +256,58 @@
             $('#instructor').select2({
                 tags: true, // เปิดใช้งานให้สามารถพิมพ์และเพิ่มใหม่ได้
                 tokenSeparators: [',', ' '] // คั่นข้อมูลที่พิมพ์เองด้วยคอมม่า หรือเว้นวรรค
+            });
+        });
+
+        function validateForm() {
+            let valid = true;
+
+            // ตรวจสอบชื่อต้น (เฉพาะตัวอักษรไทย/อังกฤษ และช่องว่าง)
+            let firstName = document.getElementById("firstName").value;
+            let firstNamePattern = /^[a-zA-Zก-๙\s]+$/;
+            if (!firstNamePattern.test(firstName)) {
+                document.getElementById("firstNameError").textContent = "⚠️ กรุณากรอกเฉพาะตัวอักษรภาษาอังกฤษหรือไทยเท่านั้น";
+                valid = false;
+            } else {
+                document.getElementById("firstNameError").textContent = "";
+            }
+
+            // ตรวจสอบนามสกุล (เฉพาะตัวอักษรไทย/อังกฤษ และช่องว่าง)
+            let lastName = document.getElementById("lastName").value;
+            if (!firstNamePattern.test(lastName)) {
+                document.getElementById("lastNameError").textContent = "⚠️ กรุณากรอกเฉพาะตัวอักษรภาษาอังกฤษหรือไทยเท่านั้น";
+                valid = false;
+            } else {
+                document.getElementById("lastNameError").textContent = "";
+            }
+
+            // ตรวจสอบรหัสนักศึกษา (ต้องเป็นตัวเลข 9 หลัก)
+            let studentId = document.getElementById("studentId").value;
+            let studentIdPattern = /^\d{9}$/;
+            if (!studentIdPattern.test(studentId)) {
+                document.getElementById("studentIdError").textContent = "⚠️ รหัสนักศึกษาต้องเป็นตัวเลข 9 หลักเท่านั้น";
+                valid = false;
+            } else {
+                document.getElementById("studentIdError").textContent = "";
+            }
+
+            // ตรวจสอบอีเมล (ต้องเป็น @cmu.ac.th และขึ้นต้นด้วย a-z หรือ _)
+            let email = document.getElementById("email").value;
+            let emailPattern = /^[a-zA-Z_]+@cmu\.ac\.th$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById("emailError").textContent = "⚠️ อีเมลต้องอยู่ในรูปแบบ example@cmu.ac.th หรือ example_example@cmu.ac.th";
+                valid = false;
+            } else {
+                document.getElementById("emailError").textContent = "";
+            }
+
+            return valid;
+        }
+
+        // ตรวจสอบแบบเรียลไทม์ (แจ้งเตือนหายเมื่อผู้ใช้พิมพ์ใหม่)
+        document.querySelectorAll("#projectForm input").forEach(input => {
+            input.addEventListener("input", function() {
+                document.getElementById(this.id + "Error").textContent = "";
             });
         });
     </script>

@@ -162,6 +162,11 @@ color: #ffa500;
   height: 100%;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  overflow: hidden; /* ป้องกันเนื้อหาเกินขอบ */
 }
 
 .project-card:hover {
@@ -173,10 +178,33 @@ color: #ffa500;
   text-align: center;
   font-size: 1.5em;
   margin-bottom: 15px;
+  word-wrap: break-word;
+  white-space: normal;
+  min-height: 60px; /* ป้องกันการ์ดไม่เท่ากัน */
+  /* จำกัดจำนวนบรรทัด */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* แสดงสูงสุด 2 บรรทัด */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis; /* เพิ่ม … เมื่อข้อความเกิน */
 }
 
 .project-card p {
   margin-bottom: 10px;
+  white-space: normal;
+}
+
+/* เฉพาะคำอธิบาย (Abstract) */
+.project-card .abstract {
+  min-height: 72px; /* กำหนดความสูงขั้นต่ำ (ปรับค่าให้พอดีกับ 3-4 บรรทัด) */
+  max-height: 72px; /* จำกัดความสูงไม่ให้เกิน 3 บรรทัด */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* จำกัดสูงสุด 3 บรรทัด */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis; /* แสดง ... เมื่อข้อความเกิน */
+  word-break: break-word;
+  white-space: normal;
 }
 
 @media (max-width: 576px) {

@@ -59,6 +59,12 @@ body {
     border-radius: 10px;
 }
 
+#projectName {
+    word-wrap: break-word; /* บังคับให้ตัดคำขึ้นบรรทัดใหม่ */
+    overflow-wrap: break-word;
+    max-width: 100%; /* หรือกำหนดเป็น px เช่น 400px */
+}
+
 .pdf-viewer {
     width: 100%;
     height: 500px;

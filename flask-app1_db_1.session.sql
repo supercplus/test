@@ -105,6 +105,12 @@ CREATE TABLE IF NOT EXISTS project_degree (
 --     'waraporn_sonwai@cmu.ac.th'
 --   );
 
+INSERT INTO admin (id, role, email)
+VALUES (1,
+    'Super_Admin',
+    'teerapat_thu@cmu.ac.th'
+  );
+
 -- SELECT * FROM student;
 
 -- DELETE FROM student WHERE stu_id = 65051664;

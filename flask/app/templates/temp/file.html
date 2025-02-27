@@ -33,7 +33,7 @@
                 {% for file in files %}
                 <tr data-project-id="{{ file.projectID }}">
                     <td class="text-center">{{ file.projectID }}</td>
-                    <td class="text-center">{{ file.project_name }}</td>
+                    <td class="text-center" style="max-width: 250px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">{{ file.project_name }}</td>
                     <td class="text-center">{{ file.category }}</td>
                     <td class="text-center">{{ file.studentID }}</td>
                     <td class="text-center">{{ file.year }}</td>
