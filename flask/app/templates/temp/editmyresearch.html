@@ -222,7 +222,7 @@
                                 File</label>
                             <input type="file" class="form-control" id="file" name="file" style="display:none;"
                             disabled
-                                required>{{ project['file_path'] }}
+                                required>
                         </div>
 
 
@@ -315,7 +315,12 @@
                 console.log(`${pair[0]}: ${pair[1]}`);
             }
 
-
+            // ตรวจสอบว่าได้เลือกไฟล์หรือไม่
+            const fileInput = document.getElementById("file");
+            if (!fileInput.files.length) {
+                alert("กรุณาเลือกไฟล์ก่อนกด Submit!");
+                return; 
+            }
 
             // ยืนยันกับผู้ใช้ก่อนดำเนินการ
             if (confirm("คุณแน่ใจหรือไม่ว่าต้องการส่งการเปลี่ยนแปลง?")) {
@@ -351,6 +356,7 @@
                 alert('การเปลี่ยนแปลงถูกยกเลิก');
             }
         }
+        document.getElementById("submitBtn").addEventListener("click", handleSubmit);
 
 
 

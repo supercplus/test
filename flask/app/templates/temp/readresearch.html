@@ -20,8 +20,8 @@
                 <img src="{{ url_for('static', filename='img/cslogo.png') }}" height="70" class="ms-5">
                 <a class="navbar-brand ms-2" href="{{ url_for('homepage') }}">Computer Science Research</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
@@ -41,7 +41,7 @@
                         <li class="nav-item me-5">
                             <a href="{{ url_for('homepage') }}" class="nav-link">Logout</a>
                         </li>
-                        
+
                     </ul>
                 </div>
             </div>
@@ -64,27 +64,41 @@
         <div id="fileDisplayArea">
             {% if is_pdf %}
             <!-- แสดง PDF ด้วย iframe #toolbar=0-->
-            <iframe src="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}" style="width: 100%; height: calc(100vh - 10px);" frameborder="0"></iframe>
+            <style>
+                embed {
+                    width: 100%;
+                    height: 900px;
+                    border: none;
+                }
+            </style>
+            <embed src="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}#toolbar=0" 
+                   type="application/pdf">
+
 
             {% elif is_image %}
             <!-- แสดงรูปภาพ -->
-            <img src="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}" alt="Project Image" class="img-fluid">
-            
+            <img src="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}"
+                alt="Project Image" class="img-fluid">
+
             {% elif is_document %}
             <!-- ลิงก์ดาวน์โหลดสำหรับ DOC -->
-            <p>Download link: <a href="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}" class="btn btn-primary" download>Download Document</a></p>
+            <p>Download link: <a
+                    href="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}"
+                    class="btn btn-primary" download>Download Document</a></p>
             <!-- แสดง DOC หรือ DOCX ผ่าน Google Docs Viewer -->
             <!-- <iframe src="https://docs.google.com/gview?url={{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}&embedded=true" style="width: 100%; height: calc(100vh - 10px);" frameborder="0"></iframe> -->
-            
+
             {% elif is_zip %}
             <!-- ลิงก์ดาวน์โหลดสำหรับ ZIP -->
-            <p>Download link: <a href="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}" class="btn btn-primary" download>Download ZIP</a></p>
-            
+            <p>Download link: <a
+                    href="{{ url_for('research_file', encoded_project_id=project_id, hashed_filename=hashed_filename) }}"
+                    class="btn btn-primary" download>Download ZIP</a></p>
+
             {% else %}
             <p>No file to display.</p>
             {% endif %}
         </div>
-        
+
 
         <!-- Views and Downloads Count -->
         <!-- <p class="text-center">

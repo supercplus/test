@@ -34,6 +34,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 # Creating an SQLAlchemy instance
 db = SQLAlchemy(app)
 socketio = SocketIO(app)
+
 # login_manager = LoginManager()
 # login_manager.login_view = 'login'
 # login_manager.init_app(app)

@@ -390,7 +390,7 @@ def project():
 
         # Validate file type and save it
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            filename = file.filename.encode('utf-8').decode('utf-8')  # บังคับใช้ UTF-8
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
 
@@ -1274,7 +1274,7 @@ def adminuploads():
 
         # Validate and save it
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            filename = file.filename.encode('utf-8').decode('utf-8')  # บังคับใช้ UTF-8
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
 
@@ -1549,6 +1549,15 @@ def myresearch(encoded_project_id):
             if student is None:
                 return "ไม่พบนักเรียนที่ตรงกับ email", 404
 
+            file_path = project[7]  # ค่าที่ดึงมาจากฐานข้อมูล
+            if file_path:
+                try:
+                    file_path = file_path.encode('utf-8').decode('utf-8')  # แก้ Encoding ป้องกันชื่อไฟล์หาย
+                except UnicodeDecodeError:
+                    pass  # ถ้ามีปัญหากับ encoding ให้ข้ามไป
+
+            file_name = os.path.basename(file_path) if file_path else None
+
             # Prepare data for rendering
             project_data = {
                 'project_name': project[0],
@@ -1560,7 +1569,7 @@ def myresearch(encoded_project_id):
                 'description': project[6],
                 'file_path': os.path.basename(project[7])
             }
-
+            
             student_data = {
                 'stu_id': student[0],
                 'firstname': student[1],
@@ -1569,7 +1578,7 @@ def myresearch(encoded_project_id):
             }
 
             return render_template('temp/editmyresearch.html', project=project_data, student=student_data, project_id=encoded_project_id)
-
+        
         elif request.method == 'POST':
             # Logic for POST request (update project data)
             if not email:
@@ -1585,7 +1594,7 @@ def myresearch(encoded_project_id):
             # Handle file if present and allowed
             file_path = None
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
+                filename = filename = file.filename.encode('utf-8').decode('utf-8')  #ใช้ UTF-8
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(file_path)
                 flash('File uploaded successfully!', 'success')
@@ -1688,6 +1697,7 @@ def myresearch_admin(project_id):
         conn = get_db_connection()
         cursor = conn.cursor()
         print(project_id)
+        
         if request.method == 'GET':
             # ดึงรายละเอียดโปรเจกต์จากฐานข้อมูลตาม ID ของโปรเจกต์ที่ระบุ
             cursor.execute("""
@@ -1745,25 +1755,19 @@ def myresearch_admin(project_id):
             return render_template('temp/adminedit.html', project=project_data, student=student_data, project_id=project_id)
 
         elif request.method == 'POST':
-            # (ส่วนนี้ยังคงเหมือนเดิม ไม่เปลี่ยนแปลง)
-            if 'file' not in request.files:
-                conn = get_db_connection()
-                cursor = conn.cursor()
-                cursor.execute("""
-                SELECT file_path FROM project WHERE projectID = %s
-                """, (project_id,))
-                file = cursor.fetchone()
-                return file
-            print(file)
-
+            file = request.files.get('file')
             ALLOWED_EXTENSION = {'pdf', 'zip', 'docx', 'doc' 'png'}
             def allowed_file(filename: str) -> bool:
                 return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSION 
 
+            file_path = None
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
+                filename = filename = file.filename.encode('utf-8').decode('utf-8')  #ใช้ UTF-8
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(file_path)
+                flash('File uploaded successfully!', 'success')
+            else:
+                flash('No file uploaded or invalid file type.', 'error')
 
             project_name = request.form.get('project_name')
             year = request.form.get('academic_year')
@@ -1772,6 +1776,15 @@ def myresearch_admin(project_id):
             project_type = request.form.get('type')
             instructor = request.form.get('instructor')
             description = request.form.get('abstract')
+             # Log data received for debugging
+            app.logger.info(f"Received project_name: {project_name}")
+            app.logger.info(f"Received academic_year: {year}")
+            app.logger.info(f"Received categoryName: {categoryName}")
+            app.logger.info(f"Received degree: {degree}")
+            app.logger.info(f"Received project_type: {project_type}")
+            app.logger.info(f"Received instructor: {instructor}")
+            app.logger.info(f"Received description: {description}")
+            app.logger.info(f"Received file: {file.filename if file else 'No file'}")
 
             cursor.execute("""
                 UPDATE project

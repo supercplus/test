@@ -270,8 +270,13 @@
                 console.log(`${pair[0]}: ${pair[1]}`);
             }
 
+            const fileInput = document.getElementById("file");
+            if (!fileInput.files.length) {
+                alert("กรุณาเลือกไฟล์ก่อนกด Submit!");
+                return; 
+            }
             if (confirm("คุณแน่ใจหรือไม่ว่าต้องการส่งการเปลี่ยนแปลง?")) {
-                fetch(`/api/myresearch/${projectId}`, {
+                fetch(`/api/adminedit/${projectId}`, {
                     method: 'POST',
                     body: formData,
                 })
