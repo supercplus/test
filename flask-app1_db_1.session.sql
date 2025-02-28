@@ -95,22 +95,14 @@ CREATE TABLE IF NOT EXISTS project_degree (
     FOREIGN KEY (degreeID) REFERENCES degree(degreeID)
 );
 
+
+-- INSERT INTO admin (id, role, email)
+-- VALUES (1,
+--     'Super_Admin',
+--     'tanom.k@cmu.ac.th'
+--   );
 -- INSERT INTO admin (id, role, email)
 -- VALUES (2,
 --     'Super_Admin',
---     'kotchakorn_tantr@cmu.ac.th'
+--     'waraporn.insom@cmu.ac.th'
 --   );
--- INSERT INTO admin (id, role, email)
--- VALUES (1,
---     'Super_Admin',
---     'kanoklak_prommin@cmu.ac.th'
---   );
-
--- INSERT INTO admin (id, role, email)
--- VALUES (1,
---     'Super_Admin',
---     'teerapat_thu@cmu.ac.th'
---   );
-
--- DELETE FROM student WHERE stu_id = 650510605;
---SELECT * FROM student;
