@@ -13,7 +13,9 @@ CREATE TABLE IF NOT EXISTS student(
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    status BOOLEAN DEFAULT false
+    status BOOLEAN DEFAULT false,
+    is_pending BOOLEAN DEFAULT true
+
 
 );
 
@@ -98,19 +100,17 @@ CREATE TABLE IF NOT EXISTS project_degree (
 --     'Super_Admin',
 --     'kotchakorn_tantr@cmu.ac.th'
 --   );
+-- INSERT INTO admin (id, role, email)
+-- VALUES (1,
+--     'Super_Admin',
+--     'kanoklak_prommin@cmu.ac.th'
+--   );
 
 -- INSERT INTO admin (id, role, email)
 -- VALUES (1,
 --     'Super_Admin',
---     'waraporn_sonwai@cmu.ac.th'
+--     'teerapat_thu@cmu.ac.th'
 --   );
 
-INSERT INTO admin (id, role, email)
-VALUES (1,
-    'Super_Admin',
-    'teerapat_thu@cmu.ac.th'
-  );
-
--- SELECT * FROM student;
-
--- DELETE FROM student WHERE stu_id = 65051664;
+-- DELETE FROM student WHERE stu_id = 650510605;
+--SELECT * FROM student;

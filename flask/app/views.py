@@ -348,7 +348,7 @@ UPLOAD_FOLDER = '/flask_app/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # ตรวจสอบว่าไฟล์มีนามสกุลที่อนุญาตหรือไม่
-ALLOWED_EXTENSION = {'pdf','zip','docx','png'}
+ALLOWED_EXTENSION = {'pdf','zip','docx','png','jpg','jpeg'}
 def allowed_file(filename: str) -> bool:
      return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSION 
 
@@ -530,6 +530,14 @@ def homerequest():
         return render_template('temp/homerequest.html', project_id=None)
 
     stu_id = student[0]
+    print(f"Updating is_pending for stu_id: {stu_id}")
+    # อัปเดต is_pending ให้เป็น FALSE สำหรับ student ที่กด request
+    cursor.execute("""
+        UPDATE student 
+        SET is_pending = FALSE 
+        WHERE stu_id = %s AND status = FALSE
+    """, (stu_id,))
+    conn.commit()
 
     cursor.execute("SELECT projectID FROM project_student WHERE stu_id = %s", (stu_id,))
     project_id_row = cursor.fetchone()
@@ -947,9 +955,9 @@ def submit_project():
 def access():
     try:
         conn = get_db_connection()
-        cursor = conn.cursor()
-
-        cursor.execute('SELECT stu_id, email FROM student WHERE status = FALSE')
+        cursor = conn.cursor()  
+        
+        cursor.execute('SELECT stu_id, email FROM student WHERE status = FALSE AND is_pending = FALSE')
         students = cursor.fetchall()
         cursor.close()
         conn.close()
@@ -965,6 +973,10 @@ def access():
                 socketio.emit('new_student', {'stu_id': student['stu_id'], 'email': student['email']})
 
         return render_template('temp/access.html', students=stu_list, firstname=firstname)
+
+    except Exception as e:
+        print(f"Error connecting to database: {e}")
+        abort(500, description="Internal Server Error while fetching data")
 
     except Exception as e:
         print(f"Error connecting to database: {e}")
@@ -1298,7 +1310,9 @@ def adminuploads():
                 cursor.execute('''
                     INSERT INTO student (stu_id, firstname, lastname, email)
                     VALUES (%s, %s, %s, %s)
-                ''', (student_id,firstName, lastName, email))
+                    ON CONFLICT (stu_id) DO NOTHING;
+                ''', (student_id, firstName, lastName, email))
+
                 
                 # Check if the degree already exists
                 cursor.execute("SELECT degreeID FROM degree WHERE degree = %s", (degree,))
@@ -1365,6 +1379,12 @@ def adminuploads():
                 cursor.execute('''
                     INSERT INTO project_supervisor (projectID, supervisorID) VALUES (%s, %s)
                 ''', (project_id, supervisorID))
+                
+                cursor.execute('''
+                    INSERT INTO student (stu_id, firstname, lastname, email, status, is_pending)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (stu_id) DO UPDATE SET status = TRUE, is_pending = TRUE
+                ''', (student_id, firstName, lastName, email, True, True))
                 
                 conn.commit()
                 
@@ -1586,7 +1606,7 @@ def myresearch(encoded_project_id):
 
             # Check if there is a file in the request
             file = request.files.get('file')
-            ALLOWED_EXTENSION = {'pdf', 'zip', 'docx', 'png'}
+            ALLOWED_EXTENSION = {'pdf','zip','docx','png','jpg','jpeg'}
 
             def allowed_file(filename: str) -> bool:
                 return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSION 
@@ -1756,7 +1776,7 @@ def myresearch_admin(project_id):
 
         elif request.method == 'POST':
             file = request.files.get('file')
-            ALLOWED_EXTENSION = {'pdf', 'zip', 'docx', 'doc' 'png'}
+            ALLOWED_EXTENSION = {'pdf','zip','docx','png','jpg','jpeg'}
             def allowed_file(filename: str) -> bool:
                 return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSION 
 
