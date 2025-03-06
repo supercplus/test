@@ -9,4 +9,4 @@
 4. ใช้คำสั่งเพื่อรัน Docker Compose:
    ./run_docker_compose.sh
 5. เมื่อ Docker สร้างและรันคอนเทนเนอร์เสร็จแล้ว ให้เปิด Browser และพิมพ์:
-   http://localhost:<PORT>
+   http://localhost:56733
