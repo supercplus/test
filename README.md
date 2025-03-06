@@ -24,27 +24,56 @@
    ```bash
    http://localhost:56733
    ```
-# รายละเอียดเกี่ยวกับโฟลเดอร์และไฟล์ในโปรเจกต์
-   1. หากต้องการเปลี่ยนพอร์ตของเว็บไซต์ ต้องแก้ในไฟล์ .env.dev ดังนี้
+# หากต้องการเปลี่ยนพอร์ตของเว็บไซต์
+   1. main.py เปลี่ยนพอร์ตที่ Flask รันอยู่:
       ```bash
-      DATABASE_PORT=<NEW_PORT>
+      if __name__ == '__main__':
+         app.run(host='0.0.0.0', port=<NEW_PORT>)
+      ```
+   2. gunicorn_starter.sh แก้ไขพอร์ตของ Gunicorn:
+      ```bash
+      gunicorn main:app --chdir app -w 2 --threads 2 -b 0.0.0.0:<NEW_PORT>
+      ```
+   3. .env.dev เปลี่ยนค่าพอร์ตของฐานข้อมูล PostgreSQL (ถ้าจำเป็น):
+      ```bash
+      DATABASE_PORT=<NEW_DB_PORT>
       DATABASE_URL=postgresql://hello_flask:hello_flask@db:$DATABASE_PORT/project
       ```
-      และ docker-compose.yml ดังนี้
-      ```bash
-      services:
-        db:
-          image: postgres
-          ports:
-            - "<NEW_PORT>:5432"  # เปลี่ยน <NEW_PORT> เป็นค่าที่คุณต้องการ
+   4. docker-compose.yml แก้ไขพอร์ตของ Flask และ PostgreSQL:
       ```
-   2. รีสตาร์ทคอนเทนเนอร์เพื่อให้ค่าพอร์ตใหม่ทำงาน
-      ```bash
+      services:
+        flask:
+          ports:
+            - "<NEW_PORT>:8080"  # เปลี่ยน <NEW_PORT> เป็นค่าที่ต้องการ
+          environment:
+            FLASK_RUN_PORT: <NEW_PORT>
+
+        db:
+          ports:
+            - "<NEW_DB_PORT>:5432"  # เปลี่ยน <NEW_DB_PORT> เป็นพอร์ตของ PostgreSQL
+      ```
+   5. build_docker.sh แก้ไขพอร์ตของ Docker:
+      ```
+      docker run -p <NEW_PORT>:8080 -d \
+      ```
+   6. รีสตาร์ท Docker เพื่อใช้ค่าพอร์ตใหม่
+      ```
       docker-compose down
       ```
-      ```bash
+      ```
       docker-compose up --build
       ```
+   7. จากนั้นลองเข้าผ่าน:
+      ```
+      http://localhost:<NEW_PORT>/
+      ```
+# User and Password ของ Database อยู๋ในไฟล์ docker-compose.yml
+   ```
+   environment:
+      - POSTGRES_USER=hello_flask
+      - POSTGRES_PASSWORD=hello_flask
+      - POSTGRES_DB=project
+   ```
 # การเพิ่ม Super Admin
 1. เข้าไฟล์ flask-app1_db_1.session.sql จากนั้นใส่ข้อมูล ดังตัวอย่าง
    ```
