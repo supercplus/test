@@ -1,5 +1,11 @@
 # Team02
 เว็บไซต์ฐานข้อมูลผลงานนักศึกษา
+# Tools and Technology
+1. Flask (Python Web Framwork): ใช้เป็น framwork สำหรับสร้างเว็บแอปพลิเคชันเพื่อจัดการ routing, templating และการเชื่อมต่อกับฐานข้อมูล
+2. PostgreSQL: ใช้เป็นฐานข้อมูลหลักสำหรับเก็บข้อมูลของโปรเจกต์
+3. SQLAlchemy(ORM): ใช้จัดการการเชื่อมต่อและการดำเนินการกับฐานข้อมูล PostgreSQL ผ่าน db
+4. JavaScript(Vanilla JS) and jQuery
+5. HTML and CSS
 # ขั้นตอนการติดตั้ง
 1. ติดตั้ง Docker ลงเครื่อง
 2. ใช้คำสั่งต่อไปนี้เพื่อโคลน Repository:
