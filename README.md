@@ -41,11 +41,12 @@
       ```
 # การเพิ่ม Super Admin
 1. เข้าไฟล์ flask-app1_db_1.session.sql จากนั้นใส่ข้อมูล ดังตัวอย่าง
+   ```
    -- INSERT INTO admin (id, role, email)
    -- VALUES (1,
    --     'Super_Admin',
    --     'tanom.k@cmu.ac.th'
    --   );
-   
+   ```
 
 
