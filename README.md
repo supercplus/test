@@ -67,7 +67,7 @@
       ```
       http://localhost:<NEW_PORT>/
       ```
-# User and Password ของ Database อยู๋ในไฟล์ docker-compose.yml
+# User and Password ของ Database อยู่ในไฟล์ docker-compose.yml
    ```
    environment:
       - POSTGRES_USER=hello_flask
