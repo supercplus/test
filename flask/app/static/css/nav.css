@@ -1,0 +1,152 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+.bg{
+      position: relative;
+}
+.bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background-color: #00224e; */
+    background-color: #00538C;
+    background-size: cover;
+    background-position: center;
+    /* opacity: 0.7; */
+    z-index: -1;
+    }
+  .navbar{
+      background-color: white;
+    }
+    
+    .navbar-collapse {
+      display: flex;
+      justify-content: space-around; /* ทำให้ปุ่มบน navbar ห่างกันอย่างสมดุล */
+      align-items: center;
+      width: 100%;
+  }
+  
+  .navbar a {
+      font-size: 20px;
+      color: black;
+      text-decoration: none;
+      font-weight: 500;
+      margin-left: 60px;
+  }
+    
+
+.navbar a:hover {
+  color: #ffa500;
+}
+
+
+
+
+/* CSS สำหรับอุปกรณ์ต่าง ๆ */
+
+/* สำหรับจอขนาดใหญ่ เช่น คอมพิวเตอร์ */
+@media (min-width: 992px) {
+  .navbar a {
+    font-size: 20px;
+    margin-left: 35px;
+  }
+}
+
+/* สำหรับจอขนาดกลาง เช่น ไอแพด */
+@media (min-width: 768px) and (max-width: 991px) {
+  .navbar a {
+    font-size: 18px;
+    margin-left: 25px;
+  }
+  .navbar-nav {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+  }
+  .container-fluid {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+/* สำหรับจอขนาดเล็ก เช่น โทรศัพท์ */
+@media (max-width: 767px) {
+  .navbar a {
+    font-size: 16px;
+    margin-left: 15px;
+  }
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .navbar-collapse {
+    justify-content: center;
+  }
+  .container-fluid {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .navbar-brand {
+    font-size: 18px;
+  }
+}
+
+/* สำหรับหน้าจอขนาดเล็กมาก */
+@media (max-width: 478px) {
+  .navbar a {
+    font-size: 14px;
+    margin-left: 10px;
+  }
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .container-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .navbar-brand {
+    font-size: 16px;
+  }
+}
+
+
+
+.navbar .container-fluid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* ให้จัดวาง space ระหว่างโลโก้และปุ่ม Hamburger */
+  padding-left: 15px; /* ลดระยะห่างซ้ายสำหรับหน้าจอเล็ก */
+  padding-right: 15px;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  margin-left: 10px; /* ปรับให้มีระยะห่างเล็กน้อยจากโลโก้ */
+}
+
+.navbar img {
+  height: 50px; /* ปรับขนาดโลโก้ให้เหมาะสมกับหน้าจอขนาดเล็ก */
+  margin-right: 10px; /* ให้โลโก้มีระยะห่างจากข้อความ */
+}
+
+/* Media Queries สำหรับหน้าจอขนาดเล็กมาก */
+@media (max-width: 576px) {
+.navbar-brand {
+    font-size: 16px; /* ลดขนาดฟอนต์ของชื่อเว็บไซต์ */
+}
+.navbar img {
+    height: 40px; /* ลดขนาดโลโก้สำหรับหน้าจอขนาดเล็กมาก */
+}
+}

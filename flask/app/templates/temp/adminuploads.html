@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin upload file</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/adminuploads.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <img src="{{ url_for('static', filename='img/cslogo.png') }}" height="70" class="ms-5">
+            <a class="navbar-brand ms-2" href="{{ url_for('homepage') }}">Computer Science Research</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
+                <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
+                    <li class="nav-item me-5">
+                        <a href="{{ url_for('homepage') }}" class="active">Home</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a href="#" class="research">Research</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a href="https://www.cs.science.cmu.ac.th/" class="aboutus">About us</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a href="{{ url_for('contact') }}" class="contact">Contact</a>
+                    </li>
+                    <li class="nav-item me-5">
+                        <a href="{{ url_for('homepage') }}" class="logout">Logout</a>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <form id="projectForm" onsubmit="handleSubmit(event)" method="POST" enctype="multipart/form-data">
+        <div class="container">
+            <div class="form-container">
+                <div class="header text-center">
+                    <h1>Project Details</h1>
+                </div>
+
+                <div class="mb-3">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                    <div id="firstNameError" class="text-danger mt-1"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                    <div id="lastNameError" class="text-danger mt-1"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="studentId" class="form-label">Student ID</label>
+                    <input type="text" class="form-control" id="studentId" name="student_id" required>
+                    <div id="studentIdError" class="text-danger mt-1"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">CMU Mail</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                    <div id="emailError" class="text-danger mt-1"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="projectName" class="form-label">Project Name</label>
+                    <input type="text" class="form-control" id="projectName" name="project_name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="academicYear" class="form-label">Academic Year</label>
+                    <select class="form-select" id="academicYear" name="academic_year" required>
+                        <option value="" disabled selected>Select Academic Year</option>
+                        <script>
+                            const currentYear = new Date().getFullYear() + 543; // เปลี่ยนเป็นปีพุทธศักราช
+                            for (let year = currentYear; year >= 2543; year--) {
+                                document.write(`<option value="${year}">${year}</option>`);
+                            }
+                        </script>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" name="category" required>
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="Web App">Web App</option>
+                            <option value="Machine Learning">Machine Learning</option>
+                            <option value="Image Processing">Image Processing</option>
+                            <option value="Games">Games</option>
+                            <option value="Data Classification">Data Classification</option>
+                            <option value="Data Analysis">Data Analysis</option>
+                            <option value="Database">Database</option>
+                            <option value="IoT">IoT</option>
+                            <option value="Network">Network</option>
+                            <option value="Windows App">Windows App</option>
+                            <option value="Security">Security</option>
+                            <option value="Simulation">Simulation</option>
+                            <option value="Data Warehouse">Data Warehouse</option>
+                            <option value="Virtual Reality">Virtual Reality</option>
+                            <option value="Other Categories">Other Categories</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="degree" class="form-label">Degree</label>
+                        <select class="form-select" id="degree" name="degree" required>
+                            <option value="" disabled selected>Select Degree</option>
+                            <option value="Bachelor">Bachelor</option>
+                            <option value="Master">Master</option>
+                            <option value="PhD">PhD</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="type" class="form-label">Type</label>
+                            <select class="form-select select2" id="type" name="type" required>
+                                <option value="" disabled selected>Select Type</option>
+                                <option value="204499">204499</option>
+                                <option value="Co-operative">Co-operative</option>
+                                <option value="Other Type">Other Type</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="instructor" class="form-label">Instructor</label>
+                            <select class="form-select select2" id="instructor" name="instructor" required>
+                                <option value="" disabled selected>Instructor</option>
+                                <option value="Dr.Ratsameetip Wita">Assistant Professor Dr. Ratsameetip Wita
+                                </option>
+                                <option value="Dr.Jakramate Bootkrajang">Associate Professor Dr. Jakramate
+                                    Bootkrajang</option>
+                                <option value="Dr.Prakarn Unachak">Assistant Professor Dr. Prakarn Unachak
+                                </option>
+                                <option value="Dr.Sutasinee Thovuttikul">Dr. Sutasinee Thovuttikul</option>
+                                <option value="Dr.Thapanapong Rukkanchanunt">Dr. Thapanapong Rukkanchanunt
+                                </option>
+                                <option value="Dr.Rattasit Sukhahuta">Associate Professor Dr. Rattasit Sukhahuta
+                                </option>
+                                <option value="Dr.Ekkarat Boonchieng">Associate Professor Dr. Ekkarat Boonchieng
+                                </option>
+                                <option value="Dr.Dussadee Praserttitipong">Assistant Professor Dr. Dussadee
+                                    Praserttitipong</option>
+                                <option value="Dr.Suphakit Awiphan">Assistant Professor Dr. Suphakit Awiphan
+                                </option>
+                                <option value="Dr.Wijak Srisujjalertwaja">Assistant Professor Dr. Wijak
+                                    Srisujjalertwaja</option>
+                                <option value="Dr.Worawut Srisukkham">Dr. Worawut Srisukkham</option>
+                                <option value="Dr.Papangkorn Inkeaw">Assistant Professor Dr. Papangkorn Inkeaw
+                                </option>
+                                <option value="Dr.Kornprom Pikulkaew">Assistant Professor Dr. Kornprom Pikulkaew
+                                </option>
+                                <option value="Dr.Jeerayut Chaijaruwanich">Associate Professor Dr. Jeerayut
+                                    Chaijaruwanich</option>
+                                <option value="Dr.Chumphol Bunkhumpornpat">Associate Professor Dr. Chumphol
+                                    Bunkhumpornpat</option>
+                                <option value="Dr.Varin Chouvatut">Associate Professor Dr. Varin Chouvatut
+                                </option>
+                                <option value="Dr.Wattana Jindaluang">Associate Professor Dr. Wattana Jindaluang
+                                </option>
+                                <option value="Dr.Samerkae Somhom">Assistant Professor Dr. Samerkae Somhom
+                                </option>
+                                <option value="Dr.Areerat Trongratsameethong">Assistant Professor Dr. Areerat
+                                    Trongratsameethong</option>
+                                <option value="Dr.Jakarin Chawachat">Assistant Professor Dr. Jakarin Chawachat
+                                </option>
+                                <option value="Dr.Prapaporn Techa-Angkoon">Assistant Professor Dr. Prapaporn
+                                    Techa-Angkoon</option>
+                                <option value="Wassana Naiyapo">Assistant Professor Wassana Naiyapo</option>
+                                <option value="Benjamas Panyangam">Assistant Professor Benjamas Panyangam
+                                </option>
+                                <option value="Noparut Vanitchanant">Noparut Vanitchanant</option>
+                                <option value="Dr.Kamonphop Srisopha">Dr. Kamonphop Srisopha</option>
+                                <option value="Kittipitch Kuptavanich">Kittipitch Kuptavanich</option>
+                                <option value="Sitthichoke Subpaiboonkit">Sitthichoke Subpaiboonkit</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="abstract" class="form-label">Abstract</label>
+                    <textarea class="form-control" id="abstract" name="abstract" rows="3" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="fileLabel" class="form-label">Choose File</label>
+                    <input type="file" class="form-control" id="file" name="file" required>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" id="submitBtn" class="btn btn-success">Uploads</button>
+                </div>
+    </form>
+    </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault(); // หยุดการส่งฟอร์มก่อน
+            if (!validateForm()) {
+                return; // ถ้ามีข้อผิดพลาด ให้ไม่ส่งฟอร์ม
+            }
+            const form = new FormData(document.getElementById('projectForm'));
+            console.log(form)
+            for (let pair of form.entries()) {
+                console.log(`${pair[0]}: ${pair[1]}`);
+            }
+
+            // ส่งข้อมูลฟอร์มไปยัง Flask
+            fetch('{{ url_for("adminuploads") }}', {
+                method: 'POST',
+                body: form,
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // ถ้าส่งข้อมูลสำเร็จ ให้เปลี่ยนหน้าไปยัง filemanagement
+                        window.location.href = "{{ url_for('filemanagement')}}";
+                    } else {
+                        alert('Submission failed. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an issue submitting the form.');
+                });
+        };
+
+
+
+        $(document).ready(function () {
+            // เปิดใช้งาน select2 สำหรับ dropdown 
+            $('.select2').select2({
+                width: '100%' // ปรับความกว้าง
+            });
+
+            $('#category').select2();
+            $('#degree').select2();
+            $('#type').select2();
+            $('#academicYear').select2(); // เปิดใช้งาน select2 สำหรับ Academic Year
+
+            $('#instructor').select2({
+                tags: true, // เปิดใช้งานให้สามารถพิมพ์และเพิ่มใหม่ได้
+                tokenSeparators: [',', ' '] // คั่นข้อมูลที่พิมพ์เองด้วยคอมม่า หรือเว้นวรรค
+            });
+        });
+
+        function validateForm() {
+            let valid = true;
+
+            // ตรวจสอบชื่อต้น (เฉพาะตัวอักษรไทย/อังกฤษ และช่องว่าง)
+            let firstName = document.getElementById("firstName").value;
+            let firstNamePattern = /^[a-zA-Zก-๙\s]+$/;
+            if (!firstNamePattern.test(firstName)) {
+                document.getElementById("firstNameError").textContent = "⚠️ กรุณากรอกเฉพาะตัวอักษรภาษาอังกฤษหรือไทยเท่านั้น";
+                valid = false;
+            } else {
+                document.getElementById("firstNameError").textContent = "";
+            }
+
+            // ตรวจสอบนามสกุล (เฉพาะตัวอักษรไทย/อังกฤษ และช่องว่าง)
+            let lastName = document.getElementById("lastName").value;
+            if (!firstNamePattern.test(lastName)) {
+                document.getElementById("lastNameError").textContent = "⚠️ กรุณากรอกเฉพาะตัวอักษรภาษาอังกฤษหรือไทยเท่านั้น";
+                valid = false;
+            } else {
+                document.getElementById("lastNameError").textContent = "";
+            }
+
+            // ตรวจสอบรหัสนักศึกษา (ต้องเป็นตัวเลข 9 หลัก)
+            let studentId = document.getElementById("studentId").value;
+            let studentIdPattern = /^\d{9}$/;
+            if (!studentIdPattern.test(studentId)) {
+                document.getElementById("studentIdError").textContent = "⚠️ รหัสนักศึกษาต้องเป็นตัวเลข 9 หลักเท่านั้น";
+                valid = false;
+            } else {
+                document.getElementById("studentIdError").textContent = "";
+            }
+
+            // ตรวจสอบอีเมล (ต้องเป็น @cmu.ac.th และขึ้นต้นด้วย a-z หรือ _)
+            let email = document.getElementById("email").value;
+            let emailPattern = /^[a-zA-Z_]+@cmu\.ac\.th$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById("emailError").textContent = "⚠️ อีเมลต้องอยู่ในรูปแบบ example@cmu.ac.th หรือ example_example@cmu.ac.th";
+                valid = false;
+            } else {
+                document.getElementById("emailError").textContent = "";
+            }
+
+            return valid;
+        }
+
+        // ตรวจสอบแบบเรียลไทม์ (แจ้งเตือนหายเมื่อผู้ใช้พิมพ์ใหม่)
+        document.querySelectorAll("#projectForm input").forEach(input => {
+            input.addEventListener("input", function() {
+                document.getElementById(this.id + "Error").textContent = "";
+            });
+        });
+    </script>
+
+</body>
+
+</html>

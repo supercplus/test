@@ -1,0 +1,46 @@
+.contact{
+    color: white;
+    padding-top: 50px;
+    font-size: 20px;
+}
+.location{
+    color: white;
+    padding-top: 30px;
+    font-size: 20px;
+}
+
+iframe{
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.address{
+  color: white;
+  padding-top: 30px;
+  font-size: 20px;
+}
+
+
+.social{
+  color: white;
+  padding-top: 30px;
+  font-size: 20px;
+}
+
+.social a{
+  margin-right: 25px;
+}
+
+.social i{
+  font-size: 35px;
+  color: white;
+}
+.social a:hover i {
+  color: #ffa500; /* สีที่จะแสดงเมื่อ hover */
+  transform: scale(1.1); /* ขยายขนาดเล็กน้อยเมื่อ hover */
+}
+
+h2 {
+  text-decoration: underline;
+  font-size: 25px;
+}

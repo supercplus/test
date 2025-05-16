@@ -1,0 +1,137 @@
+.bg{
+  position: absolute; /* จะทำให้พื้นหลังไม่เลื่อนตาม */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00538C; /* สีพื้นหลัง */
+  background-size: cover; /* ทำให้พื้นหลังเต็มหน้าจอ */
+  background-position: center;
+  z-index: -1; /* ส่งพื้นหลังไปอยู่เบื้องหลังขององค์ประกอบอื่น ๆ */
+    
+}
+.bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #00538C;
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  }
+
+.sidebar {
+  height: 100vh;
+  width: 20%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color:#00538C;
+  overflow-x: hidden;  
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-container {
+  width: 300px;
+  height: 180px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.circle-image {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 120px; /* ขนาดของวงกลม */
+  height: 120px; /* ขนาดของวงกลม */
+  border-radius: 50%; /* ทำให้เป็นวงกลม */
+  object-fit: cover; /* ปรับภาพให้เต็มวงกลม */
+  filter: invert(1); /* เปลี่ยนสีให้เป็นสีขาว */
+}
+.circle-text {
+  margin-top: 10px; /* ระยะห่างจากภาพ */
+  text-align: center;
+  color: #ffffff; /* เปลี่ยนสีข้อความเป็นสีขาว */
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  align-items: stretch !important; /* ใช้ stretch เพื่อให้ขยายเต็มความกว้าง */
+  justify-content: space-between ; /* ทำให้มีระยะห่างเท่ากัน */
+}
+
+.nav-link {
+  color: #ffffff !important; 
+  text-decoration: none; 
+  margin: 5px 15px;
+  display: flex; /* ใช้ Flexbox เพื่อจัดไอคอนและข้อความ */
+  align-items: center; 
+  padding: 10px 20px; /* เพิ่ม padding เพื่อให้คลิกง่ายขึ้น */
+  box-sizing: border-box;
+  flex-grow: 1; /* ขยายให้ลิงก์มีขนาดเท่ากัน */
+  font-size: 20px !important; 
+  border-radius: 8px; 
+}
+.nav-icon {
+  width: 25px; 
+  height: 25px; 
+  margin: 10px;
+  align-items: left;
+  display: inline-block;
+  filter: invert(1); /* เปลี่ยนสีให้เป็นสีขาว */
+  color: white;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle background change */
+  transform: scale(1.02); /* Slight scale effect */
+  transition: transform 0.3s;
+  /* text-decoration: underline;  */
+}
+.nav-link.active {
+  background-color: #d3d3d3; 
+  color: rgb(0, 0, 0) !important; 
+  transition: transform 0.3s;
+}
+.nav-link.active .nav-icon {
+  filter: brightness(0) invert(0); /* เปลี่ยนสีเป็นดำ */
+}
+
+.toggle-button {
+  display: none; /* ซ่อนปุ่มนี้ในหน้าจอใหญ่ */
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #00538C;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 2; /* ให้ปุ่มอยู่บนสุด */
+}
+
+/* สไตล์เมื่ออยู่ในหน้าจอมือถือ */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 60%; /* หรือขนาดที่คุณต้องการ */
+    left: -100%; /* เริ่มต้นซ่อน sidebar */
+    transition: left 0.3s ease; /* เพิ่มการเปลี่ยนแปลง */
+  }
+
+  .sidebar.open {
+    left: 0; /* แสดง sidebar */
+  }
+
+  .toggle-button {
+    display: block; /* แสดงปุ่มในหน้าจอมือถือ */
+  }
+}

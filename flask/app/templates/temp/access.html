@@ -1,0 +1,226 @@
+{% extends "temp/adbase.html" %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="/static/css/role.css">
+
+<head>
+  <title>Access Control</title>
+</head>
+<style>
+  .data-container {
+    height: 100%;
+    overflow-y: auto;
+    margin-left: 22%;
+    margin-top: 10px;
+  }
+
+  .cancel-button,
+  .approve-button {
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 5px;
+  }
+
+  .cancel-button:hover {
+    transform: scale(1.02);
+    background-color: #cf0000;
+  }
+
+  .approve-button {
+    background-color: #00c000;
+  }
+
+  .approve-button:hover {
+    transform: scale(1.02);
+    background-color: #009e00;
+  }
+
+  .data-item,
+  .stdid,
+  .email {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid #000000;
+  }
+</style>
+
+<body>
+  <div class="content">
+    <div class="header-bar">
+      <div class="header-item">ID</div>
+      <div class="header-item">StudentID</div>
+      <div class="header-item">CMU Mail</div>
+      <div class="header-item"></div>
+    </div>
+  </div>
+
+  <div class="data-container">
+    {% for student in students %}
+    <div class="data-row" data-id="{{ student.stu_id }}" id="row-{{ student.stu_id }}">
+      <div class="data-item">{{ loop.index }}</div>
+      <div class="data-item">{{ student.stu_id }}</div>
+      <div class="data-item">{{ student.email }}</div>
+      <div class="action-buttons">
+        <button class="cancel-button" onclick="confirmDelete(this, '{{ student.stu_id }}')">Cancel</button>
+        <button class="approve-button" onclick="confirmApprove(this, '{{ student.stu_id }}')">Approve</button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pop-up สำหรับยืนยันการอนุมัติ -->
+  <div id="approvePopup" class="popup" style="display: none;">
+    <div class="popup-content">
+      <p id="approve-message" class="approve-message">Are you sure you want to approve?</p>
+      <div class="popup-button-container">
+        <button class="approve-button" id="approveYesButton" onclick="approveItem(currentStuId)">Yes</button>
+        <button class="cancel-button" onclick="closeApprovePopup()">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pop-up สำหรับยืนยันการลบ -->
+  <div id="cancelPopup" class="popup" style="display: none;">
+    <div class="popup-content">
+      <p id="confirm-message" class="cancel-message">Are you sure you want to delete?</p>
+      <div class="popup-button-container">
+        <button class="confirm-delete" id="yesButton" onclick="deleteItem(currentStuId)">Yes</button>
+        <button class="cancel-button" onclick="closePopup()">No</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentRow;
+    let currentStuId;
+    let isFetching = false;
+
+    function confirmDelete(button, stuId) {
+      currentRow = button.closest('.data-row');
+      currentStuId = stuId;
+      document.getElementById("confirm-message").innerText = `Are you sure you want to delete studentID ${stuId}?`;
+      document.getElementById("cancelPopup").style.display = "block";
+    }
+
+    function deleteItem(stuId) {
+      fetch(`/delete_student/${stuId}`, {
+        method: 'DELETE'
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success") {
+            currentRow.remove();
+            closePopup();
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert("An error occurred while deleting the student.");
+        });
+    }
+
+    function closePopup() {
+      document.getElementById("cancelPopup").style.display = "none";
+    }
+
+    function confirmApprove(button, stuId) {
+      currentRow = button.closest('.data-row');
+      currentStuId = stuId;
+      document.getElementById("approve-message").innerText = `Are you sure you want to approve studentID ${stuId}?`;
+      document.getElementById("approvePopup").style.display = "block";
+    }
+
+    function approveItem(stuId) {
+      fetch(`/approve_student/${stuId}`, {
+        method: 'PUT'
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success") {
+            const rowToRemove = document.getElementById(`row-${stuId}`);
+            if (rowToRemove) {
+              rowToRemove.remove();
+            }
+            closeApprovePopup();
+          } else {
+            alert(data.message);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert("An error occurred while approving the student.");
+        });
+    }
+
+    function closeApprovePopup() {
+      document.getElementById("approvePopup").style.display = "none";
+    }
+
+    function updatePendingStudents() {
+      if (isFetching) return;
+      isFetching = true;
+
+      fetch('/fetch_pending_students')
+        .then(response => response.json())
+        .then(students => {
+          const dataContainer = document.querySelector('.data-container');
+          const existingRows = new Set(
+            Array.from(dataContainer.querySelectorAll('.data-row')).map(row => row.dataset.id)
+          );
+
+          students.forEach((student, index) => {
+            if (!existingRows.has(student.stu_id)) {
+              const studentRow = `
+                <div class="data-row" data-id="${student.stu_id}" id="row-${student.stu_id}">
+                  <div class="data-item">${index + 1}</div>
+                  <div class="data-item">${student.stu_id}</div>
+                  <div class="data-item">${student.email}</div>
+                  <div class="action-buttons">
+                    <button class="cancel-button" onclick="confirmDelete(this, '${student.stu_id}')">Cancel</button>
+                    <button class="approve-button" onclick="confirmApprove(this, '${student.stu_id}')">Approve</button>
+                  </div>
+                </div>
+              `;
+              dataContainer.insertAdjacentHTML('beforeend', studentRow);
+            }
+          });
+
+          isFetching = false;
+        })
+        .catch(error => {
+          console.error('Error fetching pending students:', error);
+          isFetching = false;
+        });
+    }
+
+    const socket = io();
+    socket.on('new_student', function(data) {
+      const dataContainer = document.querySelector('.data-container');
+      const existingRow = document.getElementById(`row-${data.stu_id}`);
+
+      if (!existingRow) {
+        const newRow = `
+          <div class="data-row" data-id="${data.stu_id}" id="row-${data.stu_id}">
+            <div class="data-item">${data.stu_id}</div>
+            <div class="data-item">${data.email}</div>
+            <div class="action-buttons">
+              <button class="cancel-button" onclick="confirmDelete(this, '${data.stu_id}')">Cancel</button>
+              <button class="approve-button" onclick="confirmApprove(this, '${data.stu_id}')">Approve</button>
+            </div>
+          </div>
+        `;
+        dataContainer.insertAdjacentHTML('beforeend', newRow);
+      }
+    });
+
+    setInterval(updatePendingStudents, 5000);
+  </script>
+</body>
+{% endblock %}

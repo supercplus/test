@@ -1,0 +1,91 @@
+
+.table-responsive{
+    margin-left: 200px;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    /* margin-right: 20%; */
+}
+
+table th, table td {
+    padding: 15px;
+    text-align: left;
+    /* margin-right: 20%; */
+}
+
+.search {
+    background-color: white;
+    height: 40px; 
+    margin-top: 20px;
+    width: 300px; 
+    border-radius: 15px;
+
+    display: flex;
+    align-items: center; 
+    padding: 0 10px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+
+    margin-left: 320px;
+    margin-right: 200px; 
+}
+
+.search select {
+    border: none; 
+    background-color: transparent; 
+    margin-right: 10px;
+}
+
+.search input {
+    border: none; 
+    outline: none; 
+    flex: 1; 
+    height: 100%; 
+    border-radius: 15px 0 0 15px;
+    padding: 0 10px; 
+    font-size: 14px; 
+}
+
+.search button {
+    border: none; 
+    cursor: pointer;
+    padding: 0 15px; 
+    border-radius: 0 15px 15px 0; 
+    transition: background-color 0.3s; 
+}
+
+.search button:hover {
+    background: #0056b3; 
+}
+
+/* กำหนดความกว้างของคอลัมน์ Actions */
+table th:nth-child(6),
+table td:nth-child(6) {
+    width: 120px; /* ปรับขนาดให้เหมาะสม */
+    text-align: center;
+    padding-left: 0; /* กำจัด padding ทางซ้ายของปุ่ม */
+    padding-right: 0; /* กำจัด padding ทางขวาของปุ่ม */
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+
+.add-btn {
+    height: 100%;
+    padding: 0 0px;
+    display: flex;
+    align-items: center;
+    width: 300px;
+    white-space: nowrap; 
+    font-size: 16px; 
+    margin-left: 720px;
+}
+

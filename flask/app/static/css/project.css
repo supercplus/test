@@ -1,0 +1,98 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .bg {
+    position: relative;
+    background-color: #00538C;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .navbar {
+    background-color: white;
+  }
+  
+  .navbar a {
+    font-size: 20px;
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 35px;
+  }
+  
+  .navbar a:hover {
+    color: #ffa500;
+  }
+
+body {
+    background-color: #f5f5f5;
+}
+
+.bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #00538C;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+/* 
+.container-fluid {
+    padding: 20px;
+} */
+
+img.img-fluid {
+    max-width: 100%;
+    height: auto;
+}
+
+.project {
+    margin-bottom: 3cap;
+}
+
+.bg-project {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .col-md-6.text-center img {
+        max-width: 70%; /* ลดขนาดรูปภาพลง */
+    }
+}
+
+@media (max-width: 768px) {
+    .col-md-6.text-center img {
+        max-width: 50%; /* ลดขนาดรูปภาพลงสำหรับหน้าจอขนาดกลาง */
+    }
+
+    .col-md-6 {
+        margin-top: 20px; /* เพิ่มระยะห่างด้านบนสำหรับจอเล็ก */
+    }
+}
+
+@media (max-width: 576px) {
+    .col-md-6.text-center img {
+        max-width: 40%; /* ลดขนาดรูปภาพลงสำหรับหน้าจอขนาดเล็ก */
+    }
+
+    .form-control {
+        font-size: 14px; /* ลดขนาดฟอนต์ในฟอร์ม */
+    }
+
+    .btn {
+        font-size: 14px; /* ลดขนาดฟอนต์ในปุ่ม */
+    }
+} 
